@@ -1,0 +1,10 @@
+.entry-header {
+    background-color: #f7f7f7;
+    color: #191919;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.entry-header h3{
+    margin-top: 28px;
+    margin-bottom: 12px;
+}

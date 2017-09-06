@@ -1,0 +1,94 @@
+#TicketsPage {
+}
+
+#TicketsPage table {
+    width: 100%;
+    font-size: 13px;
+    border: 1px solid #ddd;
+    min-width: 600px;
+}
+
+#TicketsPage table thead tr {
+    background-color: #c5f1d2;
+}
+
+#TicketsPage table thead tr th {
+    text-align: left;
+    padding: 7px 10px;
+}
+
+#TicketsPage table th, #TicketsPage table td {
+    width: 110px;
+    padding: 2px 10px;
+}
+
+#TicketsPage table td {
+    border: 1px solid #ddd;
+    font-size: 12px;
+}
+
+#TicketsPage table td small {
+    font-size: 11.5px;
+    color: #848484;
+}
+
+#TicketsPage table th:first-child, #TicketsPage table td:first-child {
+    width: auto;
+}
+
+#TicketsPage table tbody tr {
+}
+
+/** TICKET PAGE CONTROLS **/
+#TicketsPage .controls {
+    font-size: 13px;
+    margin-bottom: 10px;
+    vertical-align: bottom;
+    display: table;
+    width: 100%;
+}
+
+#TicketsPage .controls-left-section {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#TicketsPage .controls-right-section {
+    display: table-cell;
+    float: right;
+    vertical-align: bottom;
+    position: relative;
+    padding-right: 65px;
+}
+
+#TicketsPage .controls-right-section button {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#TicketsPage .controls-right-section input {
+    height: 30px;
+}
+
+
+
+.tickets-table {
+}
+
+.tickets-table .ticket-summary {
+    position: relative;
+    padding-right: 40px;
+}
+
+.tickets-table .ticket-summary .ticket-subject {
+}
+
+.tickets-table .ticket-summary .ticket-id {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    font-size: 12px;
+    color: #868686;
+}
+

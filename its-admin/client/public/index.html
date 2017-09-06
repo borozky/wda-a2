@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root">
+      <div class="site-wrapper">
+
+            <div class="site-header">
+              <nav class="navbar">
+                <div id="Navtop">
+                    <div class="container clearfix">
+                        <ul id="Navtop-left" class="hidden-xs">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                        <ul id="Navtop-right">
+                            <li>You are not logged in 
+                                <a href="#" class="btn btn-xs btn-default pull-right" id="AccountAction"><i class="fa fa-user"></i>&nbsp; Login</a>&nbsp;
+                                <a href="#" class="btn btn-xs pull-right" id="RegisterButton"><i class="fa fa-user"></i>&nbsp; Register</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#Navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a href="#" class="navbar-brand">ITS Ticketing System</a>
+                    </div>
+                    <div id="Navbar" class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="visible-xs"><a href="#">Home</a></li>
+                            <li class="visible-xs"><a href="#">FAQ</a></li>
+                            <li><a href="{{ url('/tickets/create') }}" id="CreateTicket" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp; Create a ticket</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+              </nav>
+            </div> <!-- end .site-header -->
+
+            <div class="site-main">
+                <div class="container">
+                    <div class="site-content">
+
+                        <div class="alert alert-success">
+                            <div class="container">Application success message goes here</div>
+                        </div>
+                        <div class="alert alert-danger">
+                            <div class="container">Application error messages goes here</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="site-footer">
+              <div class="container clearfix">
+                Copyright &copy; 2017 All Rights Reserved. <br/><small>Created and designed by Joshua Orozco</small>
+              </div>
+            </div>
+
+        </div>
+    </div>
+  </body>
+</html>

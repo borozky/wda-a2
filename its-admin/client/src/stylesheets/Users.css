@@ -1,0 +1,7 @@
+#StaffEntryArea form input[type=email]{
+    margin-left: 10px;
+}
+
+#StaffEntryArea form input[type=submit] {
+    margin-top: 10px;
+}

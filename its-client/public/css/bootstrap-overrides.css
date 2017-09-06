@@ -1,0 +1,56 @@
+.form-control, .btn {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+}
+
+.navbar {
+    margin-bottom: 0;
+    border: none;
+}
+
+.navbar-brand {
+    color: #f1f1f1;
+}
+
+.navbar-brand:focus, .navbar-brand:hover {
+    color: #fff;
+}
+
+.navbar-nav > li > a {
+    color: #e8e8e8;
+}
+
+.navbar-nav > li > a:focus,
+.navbar-nav > li > a:hover {
+    background-color: transparent;
+    color: #fff;
+}
+
+.navbar-nav > li > a.btn {
+    color: #fff;
+}
+
+
+.navbar-toggle {
+    color: #fff;
+}
+
+.navbar-toggle .icon-bar {
+    background-color: #fff
+}
+
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+    background-color: #052929;
+    border-color: #337ab7;
+}
+
+.dropdown-menu>li>a {
+    color: #fff
+}
+
+@media screen and (min-width: 768px){
+    .dropdown-menu>li>a {
+        color: initial
+    }
+}
+
