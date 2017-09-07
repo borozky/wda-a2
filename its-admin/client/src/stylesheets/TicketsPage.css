@@ -40,7 +40,7 @@
 }
 
 /** TICKET PAGE CONTROLS **/
-#TicketsPage .controls {
+#TicketsPage .tickets-table-controls {
     font-size: 13px;
     margin-bottom: 10px;
     vertical-align: bottom;
@@ -48,12 +48,12 @@
     width: 100%;
 }
 
-#TicketsPage .controls-left-section {
+#TicketsPage .tickets-table-results-label {
     display: table-cell;
     vertical-align: middle;
 }
 
-#TicketsPage .controls-right-section {
+#TicketsPage .tickets-table-search {
     display: table-cell;
     float: right;
     vertical-align: bottom;
@@ -61,13 +61,13 @@
     padding-right: 65px;
 }
 
-#TicketsPage .controls-right-section button {
+#TicketsPage .tickets-table-search button {
     position: absolute;
     right: 0;
     top: 0;
 }
 
-#TicketsPage .controls-right-section input {
+#TicketsPage .tickets-table-search input {
     height: 30px;
 }
 
