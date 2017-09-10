@@ -3,6 +3,7 @@ import EntryHeader from "../../components/EntryHeader";
 import "../../stylesheets/TicketsPage.css";
 import faker from "faker";
 import {TicketsTableParent, TicketsTableControls, TicketsTable, TicketsTablePagination} from "../../components/TicketsTable";
+import { Redirect } from "react-router-dom";
 
 class TicketsPage extends Component {
 
@@ -15,6 +16,7 @@ class TicketsPage extends Component {
         // event binding
         this.handleOnSearch = this.handleOnSearch.bind(this);
         this.handleGoToPage = this.handleGoToPage.bind(this);
+        this.handleOnSelectRow = this.handleOnSelectRow.bind(this);
         this.handleChangeItemsPerPage = this.handleChangeItemsPerPage.bind(this);
         
         // use functions to compute properties
@@ -85,6 +87,10 @@ class TicketsPage extends Component {
     handleOnSelectRow(event, ticket){
         event.preventDefault();
         console.log(ticket);
+        this.props.history.push({
+            pathname: `/tickets/${ticket.id}`,
+            state: { ticket: ticket }
+        });
     }
 
     // handler for pagination
@@ -95,13 +101,10 @@ class TicketsPage extends Component {
         }
     }
 
-
     handleChangeItemsPerPage(event){
         let itemsPerPage = Number(event.target.value);
-        this.setState({itemsPerPage: itemsPerPage});
+        this.setState({itemsPerPage: itemsPerPage, currentPage: 1});
     }
-
-
 
     render() {
         return <div id="TicketsPage">

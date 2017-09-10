@@ -61,7 +61,6 @@ export function TicketsTable({ headers, onSelectHeader, rows, onSelectRow}){
         </div>
 }
 
-// <TicketsTablePagination currentPage={1} numPages={100} onNext={e => e.preventDefault()} onPrevious={e => e.preventDefault()} onSelectPage={e => e.preventDefault()}/>
 export function TicketsTablePagination({currentPage, numPages, goToPage}){
     return <div>
         <button onClick={e => {goToPage(e, 1)}}>First</button>
