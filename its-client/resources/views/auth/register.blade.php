@@ -79,3 +79,12 @@
     </div>
     
 @endsection
+
+@section("footer-scripts")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#UserRegisterArea form").validate();
+        });
+    </script>
+@endsection
