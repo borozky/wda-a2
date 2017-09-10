@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // get all tickets,
 // optionally, you can filter results with query parameters
 Route::get("/tickets", function(Request $request){
-    $tickets = App\Ticket::where($request->all())->latest()->get();;
+    $tickets = App\Ticket::where($request->all())->latest()->get();
     return response()->json($tickets);
 });
 
@@ -49,3 +49,14 @@ Route::get("/user/{id}/tickets", function(Request $request, $id){
     return response()->json($user_tickets);
 })->where("id", "[0-9]+");
 
+
+
+Route::get("/users", function(Request $request){
+    $users = App\User::all();
+    return response()->json($users);
+});
+
+Route::get("/comments", function(Request $request){
+    $comments = App\Comment::all();
+    return response()->json($comments);
+});

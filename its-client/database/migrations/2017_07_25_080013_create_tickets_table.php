@@ -20,6 +20,11 @@ class CreateTicketsTable extends Migration
             $table->string("subject")->nullable();
             $table->longText("details");
             $table->enum("status", ["Pending", "In Progress", "Unresolved", "Resolved"])->default("Pending");
+            
+            $table->integer("escalation_level")->nullable();
+            $table->enum("priority", ["low", "medium", "high"])->nullable();
+            $table->string("assigned_to")->nullable();
+            
             $table->timestamps();
         });
     }
