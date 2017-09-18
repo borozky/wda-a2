@@ -1,8 +1,8 @@
 var express = require('express');
 var axios = require("axios");
-
 var router = express.Router();
-const tickets_url = "http://127.0.0.1:8000/api/tickets/";
+
+const tickets_url = `${process.env.DATASOURCE_URL}api/tickets/`;
 
 // GET: /api/tickets
 router.get('/', function(req, res, next) {

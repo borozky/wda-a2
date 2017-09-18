@@ -2,7 +2,7 @@ var express = require('express');
 var axios = require("axios");
 var router = express.Router();
 
-const COMMENTS_DATASOURCE_URL = "http://localhost:8000/api/comments";
+const COMMENTS_DATASOURCE_URL = `${process.env.DATASOURCE_URL}api/comments`;
 router.get('/', function(req, res, next) {
     axios.get(COMMENTS_DATASOURCE_URL).then(response => {
         return res.json(response.data);

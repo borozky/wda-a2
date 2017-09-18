@@ -20,15 +20,16 @@ function generateFakeTickets(numberOfTickets = 100){
     return tickets.sort((a, b) => b.created_at - a.created_at);
 }
 
-export const TICKET_DATASOURCE_URL = "http://localhost:3000/api/tickets";
+export const TICKET_DATASOURCE_URL = `${process.env.REACT_APP_DATASOURCE_URL}api/tickets`;
 export const GET_ALL_TICKETS = "GET_ALL_TICKETS";
 export const GETTING_ALL_TICKETS = "GETTING_ALL_TICKETS";
 export const TICKETS_RETRIEVED = "TICKETS_RETRIEVED";
 
 export const getAllTickets = () => (dispatch, getState) => {
-    console.log("getting tickets...");
+    console.log("getting tickets from " + TICKET_DATASOURCE_URL);
 
     dispatch({ type: GETTING_ALL_TICKETS });
+    
     axios.get(TICKET_DATASOURCE_URL).then(response => {
         dispatch({
             type: TICKETS_RETRIEVED,

@@ -3,7 +3,7 @@ import * as UserActions from "../actions/UserActions";
 
 export const GETTING_ALL_USERS = "GETTING_ALL_USERS";
 export const USERS_RETRIEVED = "USERS_RETRIEVED";
-export const USERS_DATASOURCE_URL = "http://localhost:3000/api/users";
+export const USERS_DATASOURCE_URL = `${process.env.REACT_APP_DATASOURCE_URL}api/users`;
 
 export const getAllUsers = () => (dispatch, getState) => {
     dispatch({

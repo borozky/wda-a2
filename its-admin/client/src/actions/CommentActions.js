@@ -5,7 +5,8 @@ export const ADDING_COMMENT = "ADDING_COMMENT";
 export const COMMENT_ADDED = "COMMENT_ADDED";
 export const GETTING_ALL_COMMENTS = "GETTING_ALL_COMMENTS";
 export const COMMENTS_RETRIEVED = "COMMENTS_RETRIEVED";
-const COMMENTS_DATASOURCE_URL = "http://localhost:3000/api/comments";
+
+const COMMENTS_DATASOURCE_URL = `${process.env.REACT_APP_DATASOURCE_URL}api/comments`;
 
 export const addComment = (ticketID, comment) => (dispatch, getState) => { 
     const user = getState().session.currentUser;

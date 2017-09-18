@@ -2,7 +2,7 @@ var express = require('express');
 var axios = require("axios");
 var router = express.Router();
 
-const USERS_DATASOURCE_URL = "http://localhost:8000/api/users";
+const USERS_DATASOURCE_URL = `${process.env.DATASOURCE_URL}api/users`;
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
