@@ -1,5 +1,6 @@
 import faker from "faker";
 import axios from "axios";
+import * as UserActions from "./UserActions";
 
 function generateFakeTickets(numberOfTickets = 100){
     const operating_system = ["Windows", "Mac", "Linux"];
@@ -21,6 +22,7 @@ function generateFakeTickets(numberOfTickets = 100){
 }
 
 export const TICKET_DATASOURCE_URL = `${process.env.REACT_APP_DATASOURCE_URL}api/tickets`;
+export const USERS_DATASOURCE_URL = `${process.env.REACT_APP_DATASOURCE_URL}api/users`;
 export const GET_ALL_TICKETS = "GET_ALL_TICKETS";
 export const GETTING_ALL_TICKETS = "GETTING_ALL_TICKETS";
 export const TICKETS_RETRIEVED = "TICKETS_RETRIEVED";
@@ -29,11 +31,33 @@ export const getAllTickets = () => (dispatch, getState) => {
     console.log("getting tickets from " + TICKET_DATASOURCE_URL);
 
     dispatch({ type: GETTING_ALL_TICKETS });
-    
-    axios.get(TICKET_DATASOURCE_URL).then(response => {
+
+    axios.all([
+        axios.get(TICKET_DATASOURCE_URL),
+        axios.get(USERS_DATASOURCE_URL)
+    ])
+    .then(axios.spread(function(ticketReponse, usersResponse){
+
+        // users retrieved
+        dispatch({
+            type: UserActions.USERS_RETRIEVED,
+            payload: usersResponse.data
+        });
+
+        // supply user information into each ticket
+        let tickets = ticketReponse.data.map(ticket => {
+            let foundUser = usersResponse.data.filter(user => (ticket.user_id).toString() == (user.id).toString());
+            return {
+                ...ticket,
+                user: foundUser[0] || { fullname: null, email: null, id: null }
+            }
+        });
+
+        // tickets retrieved
         dispatch({
             type: TICKETS_RETRIEVED,
-            payload: response.data
+            payload: tickets
         });
-    });
+
+    }));
 }
