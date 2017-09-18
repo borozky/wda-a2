@@ -15,10 +15,18 @@ class DashboardSection_NewTickets extends Component {
         this.state = {
             selectedTicket: null
         }
+
+        this.handleOnSelectRow = this.handleOnSelectRow.bind(this);
     }
 
     componentDidMount(){
         this.props.getAllTickets();
+    }
+
+    handleOnSelectRow(event, ticket){
+        console.log("EVENT", event);
+        console.log("CLICKED_TICKET", ticket);
+        this.setState({selectedTicket: ticket})
     }
 
     render() {
@@ -26,7 +34,7 @@ class DashboardSection_NewTickets extends Component {
             <DashboardSection title="New tickets">
                 <div className="row">
                     <div className="col-xs-12 col-sm-6">
-                        <DashboardTickets onSelectRow={(e, ticket) => {this.setState({selectedTicket: ticket})}}/>
+                        <DashboardTickets onSelectRow={this.handleOnSelectRow} selectedTicket={this.state.selectedTicket}/>
                     </div>
                     <div className="col-xs-12 col-sm-6">{this.state.selectedTicket &&
                         <TicketSummary ticket={this.state.selectedTicket}/>
@@ -56,13 +64,6 @@ class DashboardSection_NewTickets extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        tickets: state.tickets.data,
-        users: state.users.data
-    }
-}
-
 const mapDispatchToProps = (dispatch) => {
     return {
         getAllTickets: function(){
@@ -72,4 +73,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardSection_NewTickets);
+export default connect((dispatch) => ({}), mapDispatchToProps)(DashboardSection_NewTickets);
