@@ -9,8 +9,22 @@ import * as TicketActions from "../../actions/TicketActions";
 
 class TicketsPage extends Component {
 
+    constructor(props){
+        super(props);
+        this.handleOnSelectRow = this.handleOnSelectRow.bind(this);
+    }
+
     componentDidMount(){
         this.props.getAllTickets();
+    }
+
+    handleOnSelectRow(event, ticket){
+        event.preventDefault();
+        console.log(ticket);
+        this.props.history.push({
+            pathname: `/tickets/${ticket.id}`,
+            state: { ticket: ticket }
+        });
     }
 
     render(){
@@ -23,7 +37,7 @@ class TicketsPage extends Component {
             <div className="site-content">
                 <div className="container">
                     <DataTable loading={loadingTickets} data={tickets} searchableItems={searchableItems} columns={columns} style={{maxWidth: "100%"}}>{(ticket, index) => 
-                        <tr>
+                        <tr onClick={e => {this.handleOnSelectRow(e, ticket)}}>
                             <td>
                                 <div className="ticket-summary">
                                     <b className="ticket-subject">{ticket.subject}</b><br/>
