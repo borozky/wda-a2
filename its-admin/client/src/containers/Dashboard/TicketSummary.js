@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-const TicketSummary = ({ticket, user, onClick, location}) => {
+const TicketSummary = ({ticket, ticket: {user: user}, onClick, location}) => {
     return (
         <div className="ticket-summary">
             <div>
