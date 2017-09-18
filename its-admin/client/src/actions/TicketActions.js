@@ -1,6 +1,7 @@
 import faker from "faker";
 import axios from "axios";
 import * as UserActions from "./UserActions";
+import Fuse from "fuse.js";
 
 function generateFakeTickets(numberOfTickets = 100){
     const operating_system = ["Windows", "Mac", "Linux"];
@@ -26,6 +27,8 @@ export const USERS_DATASOURCE_URL = `${process.env.REACT_APP_DATASOURCE_URL}api/
 export const GET_ALL_TICKETS = "GET_ALL_TICKETS";
 export const GETTING_ALL_TICKETS = "GETTING_ALL_TICKETS";
 export const TICKETS_RETRIEVED = "TICKETS_RETRIEVED";
+export const SEARCHING_TICKETS = "SEARCHING_TICKETS";
+export const TICKETS_SEARCHED = "TICKETS_SEARCHED";
 
 export const getAllTickets = () => (dispatch, getState) => {
     console.log("getting tickets from " + TICKET_DATASOURCE_URL);
@@ -60,4 +63,38 @@ export const getAllTickets = () => (dispatch, getState) => {
         });
 
     }));
+}
+
+export const searchTickets = (keyword) => (dispatch, getState) => {
+    dispatch({ type: SEARCHING_TICKETS, payload: keyword.toString().trim() });
+    
+    const tickets = getState().tickets.data;
+    if (keyword.trim().length === 0) {
+        dispatch({
+            type: TICKETS_SEARCHED,
+            payload: {
+                foundTickets: tickets,
+                searchTerm: keyword
+            }
+        })
+
+    } else {
+        const fuse = new Fuse(tickets, {
+            shouldSort: true,
+            threshold: 0.1,
+            location: 0,
+            distance: 1000,
+            maxPatternLength: 32,
+            minMatchCharLength: 0,
+            keys: ["id", "subject", "software_issue", "operating_system"]
+        });
+
+        dispatch({
+            type: TICKETS_SEARCHED,
+            payload: {
+                foundTickets: fuse.search(keyword),
+                searchTerm: keyword,
+            }
+        })
+    }
 }
