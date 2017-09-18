@@ -12,6 +12,7 @@ class TicketsPage extends Component {
     constructor(props){
         super(props);
         this.handleOnSelectRow = this.handleOnSelectRow.bind(this);
+        this.handleOnSearch = this.handleOnSearch.bind(this);
     }
 
     componentDidMount(){
@@ -27,8 +28,13 @@ class TicketsPage extends Component {
         });
     }
 
+    handleOnSearch(event, keyword){
+        event.preventDefault();
+        this.props.searchTickets(keyword);
+    }
+
     render(){
-        const {tickets, searchableItems, columns, loadingTickets} = this.props;
+        const {tickets, searchableItems, columns, loading, searchTickets} = this.props;
 
         return <div id="TicketsPage">
             <EntryHeader>
@@ -36,7 +42,7 @@ class TicketsPage extends Component {
             </EntryHeader>
             <div className="site-content">
                 <div className="container">
-                    <DataTable loading={loadingTickets} data={tickets} searchableItems={searchableItems} columns={columns} style={{maxWidth: "100%"}}>{(ticket, index) => 
+                    <DataTable onSearch={this.handleOnSearch} loading={loading} data={tickets} columns={columns} style={{maxWidth: "100%"}}>{(ticket, index) => 
                         <tr onClick={e => {this.handleOnSelectRow(e, ticket)}}>
                             <td>
                                 <div className="ticket-summary">
@@ -58,10 +64,9 @@ class TicketsPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        tickets: state.tickets.data,
-        searchableItems: ["id", "subject", "software_issue", "operating_system"],
+        tickets: state.tickets.foundTickets,
         columns: ["Tickets", "Assigned to", "Created"],
-        loadingTickets: state.tickets.loading
+        loading: state.tickets.loading
     }
 }
 
@@ -69,6 +74,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getAllTickets: function(){
             dispatch(TicketActions.getAllTickets());
+        },
+        searchTickets: function(keyword){
+            dispatch(TicketActions.searchTickets(keyword));
         }
     }
 }
