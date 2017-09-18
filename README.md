@@ -4,7 +4,7 @@
 
 This application has 2 sub systems. The first one is the system to submit and store tickets and the second one is the admin system. 
 
-The ticket submission system is written in Laravel 5.4 with MySQL/SQLite database. The admin system is written in ReactJS with ExpressJS backend. The express backend communicates with 
+The ticket submission system is written in Laravel 5.4 with MySQL/SQLite database. The admin system is written in ReactJS with ExpressJS backend. The express backend (running on port 8081) will get the ticket data from Laravel-SQL system (running on port 8081).  
 
 ### How to run
 It is assumed that you have downloaded this project in your local machine.
