@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import Fuse from "fuse.js";
 import "../stylesheets/DataTable.css";
+import PropTypes from 'prop-types';
 
 const DataTableLoading = ({numCols}) => <tr><td colSpan={numCols} style={{textAlign: "center"}}>Loading...</td></tr>
 const DataTableNoItems = ({numCols}) => <tr><td colSpan={numCols} style={{textAlign: "center"}}>No items found.</td></tr>
@@ -25,6 +26,29 @@ const DataTableNoItems = ({numCols}) => <tr><td colSpan={numCols} style={{textAl
  */
 class DataTable extends Component {
 
+    static defaultProps = {
+        currentPage: 1,
+        itemsPerPage: 10,
+        style: {},
+        loading: false,
+        onPaginate: function(event, page){
+            return;
+        },
+        onSelectRow: function(event, item){
+            return;
+        }
+    }
+
+    static propTypes = {
+        onSearch: PropTypes.func.isRequired,
+        currentPage: PropTypes.number,
+        itemsPerPage: PropTypes.number,
+        loading: PropTypes.bool,
+        onPaginate: PropTypes.func,
+        onSelectRow: PropTypes.func,
+        children: PropTypes.func.isRequired
+    }
+
     constructor(props){
         super(props);
         this.data = props.data; // cache data here
@@ -34,7 +58,6 @@ class DataTable extends Component {
         this.displayedData = this.displayedData.bind(this);
         this.handleOnSearch = this.handleOnSearch.bind(this);
         this.handlePaginate = this.handlePaginate.bind(this);
-        this.handleOnChange = this.handleOnChange.bind(this);
     }
 
 
@@ -47,6 +70,7 @@ class DataTable extends Component {
     // Use componentWillReceiveProps when working with fetching data outside this component
     // eg. fetching from ajax
     componentWillReceiveProps(nextProps){
+        console.log(nextProps);
         this.data = nextProps.data;
         this.setState({ 
             data: this.data 
@@ -54,19 +78,12 @@ class DataTable extends Component {
     }
 
 
-    // handle search functionality via Fuse.js
+    // delegate search functionality to parent component
     handleOnSearch(event){
         event.preventDefault();
         const keyword = document.getElementById("DatatableSearch").value.toString();
-        if (keyword.trim().length === 0) {
-            this.setState({ currentPage: 1, data: this.data, searchTerm: keyword });
-        } else {
-            this.setState({
-                data: this.props.onSearch(event, keyword, this.props.searchableItems), 
-                currentPage: 1,
-                searchTerm: keyword
-            });
-        }
+        this.props.onSearch(event, keyword);
+        this.setState({ currentPage: 1 });
     }
 
 
@@ -78,19 +95,6 @@ class DataTable extends Component {
             this.setState({currentPage: page});
         }
     }
-
-
-    handleOnChange(event){
-        event.preventDefault();
-        let value = "";
-        if(event.target.tagName === "INPUT"){
-            value = event.target.value;
-        }
-        if(value.trim().length === 0){
-            this.setState({data: this.data});  // display original data when search box is empty
-        }
-    }
-
 
     render() {
 
@@ -105,28 +109,29 @@ class DataTable extends Component {
 
         const {searchTerm, currentPage} = this.state;
         const {columns, children} = this.props;
-        const items = this.state.data.length > 0 ? 
-                        this.displayedData().map((item, index) => children(item, index)) : 
-                        <DataTableNoItems numCols={columns.length} />;
 
         return (
             <div className="datatable-wrapper" style={this.props.style}>
                 <div className="datatable-controls">
                     <div className="datatable-control-left">{label} results</div>
                     <div className="datatable-search">
-                        <form onSubmit={this.handleOnSearch.bind(this)}>
-                            <input type="search" id="DatatableSearch" placeholder="Search" defaultValue={searchTerm} onChange={this.handleOnChange}/>
+                        <form onSubmit={this.handleOnSearch}>
+                            <input type="search" id="DatatableSearch" placeholder="Search" defaultValue={searchTerm}/>
                         </form>
                     </div>
                 </div>
-                <div className="datatable-parent">
+                <div className={`datatable-parent ${ this.props.loading ? " loading" : "" }`}>
                     <table className="datatable">
                         <thead>
                             <tr>
                                 {columns.map((column, index) => <th key={index}>{column.toString()}</th>)}
                             </tr>
                         </thead>
-                        <tbody>{ this.props.loading ? <DataTableLoading numCols={columns.length}/> : items }</tbody>
+                        <tbody>{ 
+                            this.displayedData().length > 0 ? 
+                            this.displayedData().map((item, index) => children(item, index)) : 
+                            <DataTableNoItems numCols={columns.length} />
+                        }</tbody>
                     </table>
                 </div>
                 <div className="datatable-pagination">
@@ -137,32 +142,6 @@ class DataTable extends Component {
                 </div>
             </div>
         );
-    }
-}
-
-
-DataTable.defaultProps = {
-    currentPage: 1,
-    itemsPerPage: 10,
-    style: {},
-    loading: false,
-    onSearch: function(event, keyword, searchableItems){
-        const fuse = new Fuse(this.data, {
-            shouldSort: true,
-            threshold: 0.2,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 0,
-            keys: searchableItems
-        });
-        return fuse.search(keyword);
-    },
-    onPaginate: function(event, page){
-        return;
-    },
-    onSelectRow: function(event, item){
-        return;
     }
 }
 

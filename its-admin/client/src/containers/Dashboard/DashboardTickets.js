@@ -3,6 +3,7 @@ import DataTable, { DataTableRow } from "../../components/DataTable";
 import {connect} from "react-redux";
 import Fuse from "fuse.js";
 import moment from "moment";
+import * as TicketActions from "../../actions/TicketActions";
 
 const DashboardTicketRow = ({onSelectRow, ticket = {}, active = false}) => {
     const {subject, software_issue, operating_system, id, created_at} = ticket;
@@ -22,11 +23,34 @@ const DashboardTicketRow = ({onSelectRow, ticket = {}, active = false}) => {
 };
 
 class DashboardTickets extends Component {
+    constructor(props){
+        super(props);
+        this.handleSelectedTicket = this.handleSelectedTicket.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+        this.state = {
+            selectedTicket: null,
+            searchedTickets: this.props.tickets
+        }
+    }
+
+    componentDidMount(){
+        this.props.getAllTickets();
+    }
+
+    handleSelectedTicket(e, ticket){
+        this.setState({selectedTicket: ticket});
+        this.props.onSelectRow(e, ticket);
+    }
+
+    handleSearch(event, keyword){
+        event.preventDefault();
+        this.props.searchTickets(keyword);
+    }
+
     render() {
-        const {tickets, onSelectRow, columns, searchableItems, selectedTicket} = this.props;
         return (
-            <DataTable {...this.props} data={tickets}>{ (ticket, index) => 
-                <DashboardTicketRow {...this.props} key={index} ticket={ticket} active={(selectedTicket && selectedTicket.id === ticket.id)}/>
+            <DataTable {...this.props} data={this.props.tickets} onSearch={this.handleSearch}>{ (ticket, index) => 
+                <DashboardTicketRow onSelectRow={this.handleSelectedTicket} key={index} ticket={ticket} active={(this.state.selectedTicket && this.state.selectedTicket.id === ticket.id)}/>
             }</DataTable>
         );
     }
@@ -34,10 +58,21 @@ class DashboardTickets extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        tickets: state.tickets.data,
-        searchableItems: ["id", "subject", "software_issue", "operating_system"],
+        tickets: state.tickets.foundTickets,
+        loading: state.tickets.loading,
         columns: ["Tickets", "Assigned to", "Created"]
     }
 }
 
-export default connect(mapStateToProps)(DashboardTickets);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getAllTickets: function(){
+            dispatch(TicketActions.getAllTickets());
+        },
+        searchTickets: function(keyword){
+            dispatch(TicketActions.searchTickets(keyword));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardTickets);

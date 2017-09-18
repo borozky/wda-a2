@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import faker from "faker";
-import { connect } from "react-redux";
 
 import * as TicketActions from "../../actions/TicketActions";
 
@@ -15,12 +14,7 @@ class DashboardSection_NewTickets extends Component {
         this.state = {
             selectedTicket: null
         }
-
         this.handleOnSelectRow = this.handleOnSelectRow.bind(this);
-    }
-
-    componentDidMount(){
-        this.props.getAllTickets();
     }
 
     handleOnSelectRow(event, ticket){
@@ -34,7 +28,7 @@ class DashboardSection_NewTickets extends Component {
             <DashboardSection title="New tickets">
                 <div className="row">
                     <div className="col-xs-12 col-sm-6">
-                        <DashboardTickets onSelectRow={this.handleOnSelectRow} selectedTicket={this.state.selectedTicket}/>
+                        <DashboardTickets onSelectRow={this.handleOnSelectRow}/>
                     </div>
                     <div className="col-xs-12 col-sm-6">{this.state.selectedTicket &&
                         <TicketSummary ticket={this.state.selectedTicket}/>
@@ -64,13 +58,5 @@ class DashboardSection_NewTickets extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getAllTickets: function(){
-            dispatch(TicketActions.getAllTickets());
-        }
-    }
-}
 
-
-export default connect((dispatch) => ({}), mapDispatchToProps)(DashboardSection_NewTickets);
+export default DashboardSection_NewTickets;

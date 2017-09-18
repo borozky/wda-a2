@@ -23,7 +23,14 @@
     margin-bottom: 10px;
     background-color: #fff;
 }
-.datatable tr {}
+.datatable tr {
+
+}
+.datatable tr:hover {
+    cursor: pointer;
+}
+
+
 .datatable tr.selected {
     background-color: #f1f1fd;
 }
@@ -42,4 +49,30 @@
 }
 .datatable-pagination {
     margin-bottom: 10px;
+}
+
+.datatable-parent {
+    position: relative;
+}
+.datatable-parent.loading:before {
+    display: table-cell;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.61);
+    vertical-align: middle;
+    text-align: center;
+}
+
+.datatable-parent.loading:after {
+    display: inline-block;
+    content: "Loading...";
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    margin-top: -12px;
+    text-align: center;
 }
