@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
 
 import EntryHeader from "../../components/EntryHeader";
 import DashboardSection from "./DashboardSection";
@@ -12,7 +13,7 @@ class DashboardPage extends Component {
         return (
             <div id="DashboardPage">
                 <EntryHeader>
-                    <h3>Welcome, Joshua Orozco <br/>
+                    <h3>Welcome, {this.props.currentUser.displayName}<br/>
                         <small>In this application, you can manage, assign and add comments to all tickets</small>
                     </h3>
                 </EntryHeader>
@@ -27,6 +28,11 @@ class DashboardPage extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.session.currentUser
+    }
+}
 
 
-export default DashboardPage;
+export default connect(mapStateToProps)(DashboardPage);
