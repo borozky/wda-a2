@@ -2,44 +2,44 @@ import React, { Component } from 'react';
 import SiteHeader from "./containers/SiteHeader";
 import SiteMain from "./containers/SiteMain";
 import SiteFooter from "./containers/SiteFooter";
+import SignInPage from "./containers/SignInPage";
+import * as SessionActions from "./actions/SessionActions";
 
+import { connect } from "react-redux";
 import {provider, auth} from './client';
+import { withRouter } from "react-router-dom";
 
 class App extends Component {
-
     constructor(props){
         super(props);
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
-
-
-        this.state = {
-            user: null
-        }
     }
 
-    login() {
-        auth().signInWithPopup(provider).then(result => {
-            this.setState({user: result.user});
-        });
+    login(e) {
+        SessionActions.login();
     }
 
-    logout() {
-        auth().signOut().then(() =>{
-            this.setState({user: null});
-        });
+    logout(e) {
+        SessionActions.logout();
     }
 
     render() {
-        const {user} = this.state
         return (
             <div className="site-wrapper">
-                <SiteHeader user={this.state.user} onLogin={this.login} onLogout={this.logout}/>
-                <SiteMain />
+                <SiteHeader user={this.props.currentUser} onLogin={this.login} onLogout={this.logout}/>
+                {this.props.currentUser ? <SiteMain /> : <SignInPage/>}
                 <SiteFooter />
             </div>
         );
     }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.session.currentUser
+    }
+}
+
+
+export default withRouter(connect(mapStateToProps)(App));
