@@ -13,9 +13,39 @@ const stateLogger = store => next => action => {
     return result;
 }
 
-export default (initialState = {}) => {
-    return applyMiddleware(thunk, stateLogger)(createStore)(reducers, initialState);
+const checkAuth = store => next => action => {
+
+    let result;
+    result = next(action);
+
+    let session = store.getState().session;
+    if (session.currentUser == null) {
+        console.log("USER IS NOT LOGGED IN");
+    }
+    return result;  
 }
+
+const checkUserRole = store => next => action => {
+
+    let result;
+    result = next(action);
+    let session = store.getState().session;
+
+    if (session.currentUser) {
+        if (typeof session.currentUser.role == "undefined") {
+            console.log("CURRENT USER HAS NO ROLE");
+        }
+    }
+
+    return result; 
+}
+
+
+export default (initialState = {}) => {
+    return applyMiddleware(thunk, stateLogger, checkAuth, checkUserRole)(createStore)(reducers, initialState);
+}
+
+
 
 
 
