@@ -9,8 +9,7 @@ use App\User;
 class Comment extends Model
 {
     protected $table = "Comment";
-
-    protected $fillable = ["ticket_id", "user_id", "details"];
+    protected $fillable = ["ticket_id", "details", "commentor_id", "commentor_email", "commentor_fullname"];
     
     public function ticket(){
         return $this->belongsTo(Ticket::class);

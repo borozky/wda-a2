@@ -26,7 +26,9 @@ class CommentRequest extends FormRequest
         return [
             "details" => "required|min:2",
             "ticket_id" => "required|exists:Ticket,id",
-            "user_id" => "required|exists:User,id",
+            "commentor_id" => "nullable",
+            "commentor_email" => "required|email",
+            "commentor_fullname" => "required|min:2"
         ];
     }
 }

@@ -19,6 +19,7 @@ class CreateCommentsTable extends Migration
             $table->foreign('ticket_id')->references('id')->on('Ticket');
             $table->longText("details");
 
+            $table->string("commentor_id");
             $table->string("commentor_email");
             $table->string("commentor_fullname");
             

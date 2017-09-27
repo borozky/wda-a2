@@ -60,3 +60,44 @@ Route::get("/comments", function(Request $request){
     $comments = App\Comment::all();
     return response()->json($comments);
 });
+
+Route::get("comments/{id}", function(Request $request, $id){
+    $comment = App\Comment::find($id);
+    return response()->json($comment);
+});
+
+Route::get("tickets/{id}/comments", function($id){
+    $ticket = App\Ticket::find($id);
+    $comments = $ticket->comments;
+    return response()->json($comments);
+});
+
+Route::post("tickets/{id}/comments", function(App\Http\Requests\CommentRequest $request, $id){
+    $comment = new App\Comment;
+    $comment->ticket_id = $id;
+    $comment->details = $request->details;
+    $comment->commentor_id = $request->commentor_id;
+    $comment->commentor_email = $request->commentor_email;
+    $comment->commentor_fullname = $request->commentor_fullname;
+
+    if($comment->save()){
+        return response()->json($comment);
+    }
+
+    return abort(422);
+});
+
+Route::post("/comments", function(App\Http\Requests\CommentRequest $request){
+    $comment = new App\Comment;
+    $comment->ticket_id = $request->ticket_id;
+    $comment->details = $request->details;
+    $comment->commentor_id = $request->commentor_id;
+    $comment->commentor_email = $request->commentor_email;
+    $comment->commentor_fullname = $request->commentor_fullname;
+    
+    if($comment->save()){
+        return response()->json($comment);
+    }
+
+    return abort(422); // Unprocessable entity
+});
