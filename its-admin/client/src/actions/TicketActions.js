@@ -30,6 +30,10 @@ export const TICKETS_RETRIEVED = "TICKETS_RETRIEVED";
 export const SEARCHING_TICKETS = "SEARCHING_TICKETS";
 export const TICKETS_SEARCHED = "TICKETS_SEARCHED";
 
+export const UPDATING_TICKET = "UPDATING_TICKET";
+export const TICKET_UPDATED = "TICKET_UPDATED";
+export const TICKET_UPDATE_FAILED = "TICKET_UPDATE_FAILED";
+
 export const getAllTickets = () => (dispatch, getState) => {
     console.log("getting tickets from " + TICKET_DATASOURCE_URL);
 
@@ -97,4 +101,21 @@ export const searchTickets = (keyword) => (dispatch, getState) => {
             }
         })
     }
+}
+
+
+export const updateTicket = (ticketID, properties = {}) => (dispatch, getState) => {
+    dispatch({ type: UPDATING_TICKET });
+
+    axios.put(TICKET_DATASOURCE_URL + "/" + ticketID, properties).then(function(response){
+        dispatch({
+            type: TICKET_UPDATED,
+            payload: response.data
+        });
+    }).catch(function(error){
+        dispatch({
+            type: TICKET_UPDATE_FAILED,
+            payload: ticketID
+        })
+    });
 }
