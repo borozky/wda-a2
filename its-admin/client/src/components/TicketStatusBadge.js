@@ -1,7 +1,8 @@
 import React from 'react';
 import "../stylesheets/TicketStatusBadge.css";
 
-export default ({status}) => 
-    <span className={`btn btn-xs ticket-status-badge status-${status.replace('_', '-').toLowerCase()}`}>
-        {status.toString()}
-    </span>
+export default (props) => 
+    <button {...props} className={`btn btn-xs ticket-status-badge status-${props.status.replace(' ', '-').toLowerCase()}`}>
+        {props.status.toString()}
+        {props.children}
+    </button>
