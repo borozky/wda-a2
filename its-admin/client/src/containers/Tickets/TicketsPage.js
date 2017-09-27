@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import EntryHeader from "../../components/EntryHeader";
 import faker from "faker";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -43,10 +43,12 @@ class TicketsPage extends Component {
             <div className="site-content">
                 <div className="container">
                     <DataTable onSearch={this.handleOnSearch} loading={loading} data={tickets} columns={columns} style={{maxWidth: "100%"}}>{(ticket, index) => 
-                        <tr onClick={e => {this.handleOnSelectRow(e, ticket)}}>
+                        <tr key={index}>
                             <td>
                                 <div className="ticket-summary">
-                                    <b className="ticket-subject">{ticket.subject}</b><br/>
+                                    <Link to={`/tickets/${ticket.id}`}>
+                                        <b className="ticket-subject">{ticket.subject}</b>
+                                    </Link><br/>
                                     <small className="ticket-meta">{ticket.software_issue} ({ticket.operating_system})</small>
                                     <span className="ticket-id">#{ticket.id}</span>
                                 </div>
