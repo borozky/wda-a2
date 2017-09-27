@@ -30,6 +30,22 @@ export default function comments(state = initialState, action){
                 data: action.payload,
                 loading: false
             }
+        case CommentActions.GETTING_TICKET_COMMENTS:
+            return {
+                ...state,
+                loading: true
+            };
+        case CommentActions.TICKET_COMMENTS_RETRIEVED:
+            return {
+                ...state,
+                loading: false,
+                // combine all existing and addded comments
+                // then remove the duplicates
+                data: state.data.concat(action.payload).filter((comment, index, self) => {
+                    var uniqCommentIDs = self.map(i => i.id).filter((i, idx, s) => (s.indexOf(i) == idx));
+                    return uniqCommentIDs.indexOf(comment.id) == index;
+                })
+            };
         default:
             return state
     }
