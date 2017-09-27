@@ -34,6 +34,31 @@ export default function tickets(state = initialState, action){
                 searchTerm: action.payload.searchTerm,
                 foundTickets: action.payload.foundTickets,
                 loading: false
+            };
+        case TicketActions.UPDATING_TICKET:
+            return {
+                ...state,
+                loading: true
+            };
+        case TicketActions.TICKET_UPDATED:
+            return {
+                ...state,
+                loading: false,
+                data: state.data.map((item, index) => {
+                    if (action.payload.id === item.id) {
+                        return {
+                            ...item,
+                            ...action.payload
+                        };
+                    }
+
+                    return item;
+                })
+            }
+        case TicketActions.TICKET_UPDATE_FAILED:
+            return {
+                ...state,
+                loading: false
             }
         default:
             return state;
