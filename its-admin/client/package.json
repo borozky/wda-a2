@@ -15,7 +15,8 @@
     "react-scripts": "1.0.13",
     "react-tinymce": "^0.6.0",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "xss": "^0.3.4"
   },
   "scripts": {
     "start": "PORT=8082 react-scripts start",
