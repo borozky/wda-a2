@@ -1,0 +1,22 @@
+.ticket-comments {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.ticket-comments .comment {
+    padding: 10px 10px;
+    margin: 5px 0;
+    background-color: #fbfbfb;
+    border: 1px solid #efefef
+}
+.ticket-comments .comment .commenter {
+    font-weight: bold;
+    font-size: 11px;
+}
+.ticket-comments .comment .comment-details {
+    display: inline-block;
+    width: 100%;
+    color: #6b6b6b;
+    font-family: Menlo, DejaVu Sans Mono, Consolas, monospace;
+    font-size: 11px;
+}
