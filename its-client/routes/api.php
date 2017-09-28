@@ -37,9 +37,29 @@ Route::get("/tickets/search/{keyword}", function(Request $request){
 
 
 // get tickets by id
-Route::get("tickets/{id}", function($id){
-    $ticket = App\Ticket::find($id);
-    return response()->json($ticket);
+Route::get("tickets/{ticket}", function(App\Ticket $id){
+    return $ticket;
+});
+
+Route::put("tickets/{ticket}", function(Request $request, App\Ticket $ticket){
+    // if ticket is not found, will redirect to 404 page
+    // see: Laravel model binding
+
+    // If these fields are provided, they will be validate
+    // Doesn't have to fill all fields. 
+    $validator = Validator::make($request->all(), [
+        "status" => "in:Pending,In Progress,Unresolved,Resolved",
+        "escalation_level" => "in:1,2,3",
+        "priority" => "in:low,medium,high",
+        "assigned_to" => "min:2"
+    ]);
+
+    if($validator->fails()){
+        return response($validator->errors(), 422);
+    }
+
+    $ticket->update($request->all());
+    return $ticket;
 });
 
 
@@ -61,13 +81,11 @@ Route::get("/comments", function(Request $request){
     return response()->json($comments);
 });
 
-Route::get("comments/{id}", function(Request $request, $id){
-    $comment = App\Comment::find($id);
-    return response()->json($comment);
+Route::get("comments/{comment}", function(Request $request, App\Comment $comment){
+    return $comment;
 });
 
-Route::get("tickets/{id}/comments", function($id){
-    $ticket = App\Ticket::find($id);
+Route::get("tickets/{ticket}/comments", function(App\Ticket $ticket){
     $comments = $ticket->comments;
     return response()->json($comments);
 });
