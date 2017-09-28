@@ -35,10 +35,7 @@ export const TICKET_UPDATED = "TICKET_UPDATED";
 export const TICKET_UPDATE_FAILED = "TICKET_UPDATE_FAILED";
 
 export const getAllTickets = () => (dispatch, getState) => {
-    console.log("getting tickets from " + TICKET_DATASOURCE_URL);
-
     dispatch({ type: GETTING_ALL_TICKETS });
-
     axios.all([
         axios.get(TICKET_DATASOURCE_URL),
         axios.get(USERS_DATASOURCE_URL)

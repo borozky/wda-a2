@@ -44,7 +44,6 @@ export const getCommentsByTicketID = (ticket_id) => (dispatch, getState) => {
     dispatch({ type: GETTING_TICKET_COMMENTS });
     axios.get(TICKET_COMMENTS_DATASOURCE_URL(ticket_id))
     .then(response => {
-        console.log("COMMENTS", response.data);
         dispatch({
             type: TICKET_COMMENTS_RETRIEVED,
             payload: response.data

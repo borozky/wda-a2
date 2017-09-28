@@ -11,8 +11,6 @@ export const getAllStaff = () => (dispatch, getState) => {
         type: GETTING_ALL_STAFF
     });
     ref.child("staff").once("value").then(function(snapshot){
-        console.log(snapshot.val());
-
         dispatch({ 
             type: STAFF_RETRIEVED,
             payload: snapshot.val()
