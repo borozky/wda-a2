@@ -7,14 +7,21 @@ class EscalationLevelForm extends Component {
     constructor(props){
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+
         this.state = {
             escalationLevel: this.props.escalationLevel
         }
+
+        console.log("ESCALATION LEVEL", this.props.escalationLevel);
     }
 
     handleSubmit(event){
         event.preventDefault();
 
+        const ticketID = this.props.ticket.id;
+        this.props.updateTicket(ticketID, {
+            escalation_level: this.state.escalationLevel
+        });
     }
 
     render() {

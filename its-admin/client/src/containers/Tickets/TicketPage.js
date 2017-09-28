@@ -59,7 +59,7 @@ class TicketPage extends Component {
                         <FixedWidthSidebar direction="right">
                             <Sidebar>
                                 <TicketStatusForm ticket={ticket} status={ticket.status}/>
-                                <EscalationLevelForm ticket={ticket} level={ticket.escalation_level} />
+                                <EscalationLevelForm ticket={ticket} escalationLevel={ticket.escalation_level} />
                                 <p>
                                     <b>Submitted by: </b><br/>
                                     <span>{ticket.user.fullname}</span>
