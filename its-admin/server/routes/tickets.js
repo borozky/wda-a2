@@ -34,5 +34,16 @@ router.get("/:ticketID/comments", function(req, res, next){
     });
 });
 
+router.put("/:ticketID", function(req, res, next){
+    axios.put([tickets_url, req.param("ticketID")].join("/"), req.body )
+    .then(function(response){
+        return res.json(response.data);
+    }).catch(function(error){
+        const status = error.response.status || 422;
+        const data = error.response.data || [];
+        return res.status(status).json(error.response.data);
+    });
+});
+
 
 module.exports = router;
