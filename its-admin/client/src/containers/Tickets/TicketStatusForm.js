@@ -9,15 +9,26 @@ class TicketStatusForm extends Component {
     constructor(props){
         super(props);
 
+        this.handleOnSubmit = this.handleOnSubmit.bind(this);
+
         this.state = {
             status: this.props.status
         }
     }
 
+    handleOnSubmit(event){
+        event.preventDefault();
+
+        const ticketID = this.props.ticket.id;
+        this.props.updateTicket(ticketID, {
+            status: this.state.status 
+        });
+    }
+
     render() {
         return (
             <div className="ticket-status-form">
-                <form>
+                <form onSubmit={this.handleOnSubmit}>
                 <b>Status:</b><br/>
                 <select name="ticket-status" value={this.state.status} id="TicketStatus" style={{marginRight: 5, fontSize: 13}} onChange={e => {this.setState({status: e.target.value})}}>
                     <option value="Pending">Pending{this.props.status == "Pending" && " *"}</option>
