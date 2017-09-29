@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import EntryHeader from "../../components/EntryHeader";
 import { Link } from "react-router-dom";
 import { FixedWidthSidebar, Sidebar, ResponsiveContent } from "../../components/FixedWidthSidebar";
-
-import TinyMCE from 'react-tinymce';
 import * as TicketActions from "../../actions/TicketActions";
 import * as CommentActions from "../../actions/CommentActions";
 import Comments from "./Comments";
 import TicketStatusForm from "./TicketStatusForm";
 import EscalationLevelForm from "./EscalationLevelForm";
+import TicketPriorityForm from "./TicketPriorityForm";
+import moment from "moment";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+import "../../stylesheets/TicketPage.css";
 
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
@@ -20,8 +24,9 @@ class TicketPage extends Component {
         this.state = { comment: "" }
         this.addComment = this.addComment.bind(this);
         this.props.getAllTickets();
-
         this.handleEditorChange = this.handleEditorChange.bind(this);
+
+        window.moment = moment;
     }
 
     addComment(e){
@@ -29,11 +34,11 @@ class TicketPage extends Component {
         const ticket_id = this.props.match.params.id;
         const user = this.props.currentUser;
         this.props.addComment(ticket_id, this.state.comment, user);
+        this.setState({ comment: "" }); 
     }
 
-    handleEditorChange(event){
-        event.preventDefault();
-        this.setState({ comment: event.target.getContent() });
+    handleEditorChange(value){
+        this.setState({ comment: value });
     }
 
     componentDidMount(){
@@ -60,6 +65,7 @@ class TicketPage extends Component {
                             <Sidebar>
                                 <TicketStatusForm ticket={ticket} status={ticket.status}/>
                                 <EscalationLevelForm ticket={ticket} escalationLevel={ticket.escalation_level} />
+                                <TicketPriorityForm ticket={ticket} priority={ticket.priority || ""}/>
                                 <p>
                                     <b>Submitted by: </b><br/>
                                     <span>{ticket.user.fullname}</span>
@@ -81,20 +87,10 @@ class TicketPage extends Component {
                                 </div>
                                 <hr/>
                                 <div className="ticket-comment-area">
-                                    <form onSubmit={ this.addComment }>
-                                        <b>Add comment</b>
-                                        <p>
-                                            <TinyMCE content={this.state.content} 
-                                                config={{
-                                                    force_br_newlines : true,
-                                                    force_p_newlines : false,
-                                                    forced_root_block : '',
-                                                    plugins: 'link image code', 
-                                                    toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code' 
-                                                }} 
-                                                onChange={this.handleEditorChange} />
-                                        </p>
-                                        <p><button type="submit" id="SubmitCommentButton" className="btn btn-xs btn-success">Submit comment</button></p>
+                                    <form onSubmit={ this.addComment } style={{height: 200}}>
+                                        <b>Add comment</b><br/>
+                                        <ReactQuill value={this.state.comment} onChange={this.handleEditorChange}/>
+                                        <button type="submit" id="SubmitCommentButton" className="btn btn-xs btn-success">Submit comment</button>
                                     </form>
                                     <hr/>
                                     <b>Comments</b>
@@ -116,13 +112,19 @@ const mapStateToProps = (state, props) => {
     const tickets = state.tickets.data;
     const comments = state.comments.data;
     const foundTicket = tickets.filter(ticket => ticket.id == ticketID)[0] || null;
-    console.log("FOUND TICKET", foundTicket);
-    const foundComments = foundTicket ? comments.filter(comment => comment.ticket_id == foundTicket.id) : null;
-    console.log("FOUND COMMENTS", foundComments);
+    const foundComments = foundTicket ? comments.filter(comment => comment.ticket_id == foundTicket.id) : [];
+    const sortedComments = foundComments.sort(function(commentA, commentB){
+        const dateA = moment(commentA.created_at).toDate();
+        const dateB = moment(commentB.created_at).toDate();
+
+        // latest comment first
+        return dateA < dateB;
+    });
+
     return {
         ticket: foundTicket,
         currentUser: state.session.currentUser,
-        comments: foundComments,
+        comments: sortedComments,
     };
 }
 
@@ -145,4 +147,4 @@ const mapDispatchToProps = (dispatch) => {
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(TicketPage);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TicketPage));

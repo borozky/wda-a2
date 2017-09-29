@@ -1,0 +1,11 @@
+.ticket-comment-area form {
+    padding-bottom: 30px;
+    position: relative;
+}
+
+.ticket-comment-area form button[type=submit],
+.ticket-comment-area form input[type=submit] {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
