@@ -37,7 +37,7 @@ Route::get("/tickets/search/{keyword}", function(Request $request){
 
 
 // get tickets by id
-Route::get("tickets/{ticket}", function(App\Ticket $id){
+Route::get("tickets/{ticket}", function(App\Ticket $ticket){
     return $ticket;
 });
 
@@ -75,6 +75,11 @@ Route::get("/users", function(Request $request){
     $users = App\User::all();
     return response()->json($users);
 });
+
+
+
+
+// COMMENTS -------------
 
 Route::get("/comments", function(Request $request){
     $comments = App\Comment::all();
