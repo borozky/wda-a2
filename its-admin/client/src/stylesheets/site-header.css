@@ -130,6 +130,7 @@
     border: 1px solid #103350;
     padding-left: 12px;
     padding-right: 12px;
+    color: #fff;
 }
 
 #LogoutButton:hover {
