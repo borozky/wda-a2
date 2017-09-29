@@ -105,6 +105,8 @@ export const updateTicket = (ticketID, properties = {}) => (dispatch, getState) 
     dispatch({ type: UPDATING_TICKET });
 
     axios.put(TICKET_DATASOURCE_URL + "/" + ticketID, properties).then(function(response){
+        console.log("UPDATING TICKET: " + ticketID + " WITH RESPONSE", response);
+
         dispatch({
             type: TICKET_UPDATED,
             payload: response.data
