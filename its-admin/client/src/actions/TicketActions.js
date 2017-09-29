@@ -118,3 +118,4 @@ export const updateTicket = (ticketID, properties = {}) => (dispatch, getState) 
         })
     });
 }
+

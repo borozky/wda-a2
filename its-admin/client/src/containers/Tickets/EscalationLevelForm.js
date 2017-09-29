@@ -7,12 +7,9 @@ class EscalationLevelForm extends Component {
     constructor(props){
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-
         this.state = {
             escalationLevel: this.props.escalationLevel
         }
-
-        console.log("ESCALATION LEVEL", this.props.escalationLevel);
     }
 
     handleSubmit(event){
@@ -25,6 +22,11 @@ class EscalationLevelForm extends Component {
     }
 
     render() {
+        let disabledProps = {};
+        if (this.props.updating) {
+            disabledProps.disabled = "Disabled";
+        }
+
         return (
             <form onSubmit={this.handleSubmit}>
                 <b>Update Escalation Level to:</b><br/>
@@ -35,9 +37,16 @@ class EscalationLevelForm extends Component {
                     <option value="2">Level Two{this.props.escalationLevel === "2" && " *"}</option>
                     <option value="3">Level Three{this.props.escalationLevel === "3" && " *"}</option>
                 </select>
-                { this.state.escalationLevel != this.props.escalationLevel && <button className="btn btn-xs btn-primary" type="submit">Submit</button> }
+                { this.state.escalationLevel != this.props.escalationLevel && <button {...disabledProps} className="btn btn-xs btn-primary" type="submit">Submit</button> }
             </form>
         );
+    }
+}
+
+const mapStateToProps = (state, props) => {
+    return {
+        ...props,
+        updating: state.tickets.loading
     }
 }
 
@@ -50,4 +59,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect(null, mapDispatchToProps)(EscalationLevelForm);
+export default connect(mapStateToProps, mapDispatchToProps)(EscalationLevelForm);

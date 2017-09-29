@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import faker from "faker";
-
 import * as TicketActions from "../../actions/TicketActions";
-
 import DashboardSection from "./DashboardSection";
 import DashboardTickets from "./DashboardTickets";
 import TicketSummary from "./TicketSummary";
+import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
+import moment from "moment";
 
-class DashboardSection_NewTickets extends Component {
+class DashboardSection_Tickets extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            selectedTicket: null
+            selectedTicket: null,
+            tickets: this.props.tickets
         }
         this.handleOnSelectRow = this.handleOnSelectRow.bind(this);
     }
@@ -23,15 +25,20 @@ class DashboardSection_NewTickets extends Component {
         this.setState({selectedTicket: ticket})
     }
 
+    componentDidMount(){
+        this.props.getAllTickets();
+    }
+
     render() {
         return (
-            <DashboardSection title="New tickets">
+            <DashboardSection title="Pending Tickets">
                 <div className="row">
-                    <div className="col-xs-12 col-sm-6">
-                        <DashboardTickets onSelectRow={this.handleOnSelectRow}/>
+                    <div className="col-xs-12 col-sm-8">
+                        <DashboardTickets onSelectRow={this.handleOnSelectRow} tickets={this.props.tickets}/>
                     </div>
-                    <div className="col-xs-12 col-sm-6">{this.state.selectedTicket &&
-                        <TicketSummary ticket={this.state.selectedTicket}/>
+                    <div className="col-xs-12 col-sm-4">{this.state.selectedTicket ?
+                        <TicketSummary ticket={this.state.selectedTicket}/> :
+                        <span>Select a ticket to preview</span>
                     }</div>
                 </div>
             </DashboardSection>
@@ -58,5 +65,23 @@ class DashboardSection_NewTickets extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        tickets: state.tickets.foundTickets.filter(ticket => ticket.status === "Pending").sort(function(ticketA, ticketB){
+            const dateA = moment(ticketA.created_at).toDate();
+            const dateB = moment(ticketB.created_at).toDate();
+            return dateA < dateB;
+        })
+    }
+}
 
-export default DashboardSection_NewTickets;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getAllTickets: function(){
+            dispatch(TicketActions.getAllTickets());
+        }
+    }
+}
+
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DashboardSection_Tickets));

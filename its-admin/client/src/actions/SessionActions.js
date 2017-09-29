@@ -10,6 +10,12 @@ export const LOGGED_OUT = "LOGGED_OUT";
 export const ASSIGNING_NEW_USER_ROLE = "ASSIGNING_NEW_USER_ROLE";
 export const NEW_USER_ROLE_ASSIGNED = "NEW_USER_ROLE_ASSIGNED";
 
+export const SIGNING_UP = "SIGNING_UP";
+export const SIGNED_UP = "SIGNED_UP";
+export const SIGNUP_FAILED = "SIGNUP_FAILED";
+
+export const USERSESSION_CHECKED = "USERSESSION_CHECKED"
+
 
 // check user sessions. Also identify what kind of role the user have
 export const checkUserSession = () => (dispatch, getState) => {
@@ -20,9 +26,9 @@ export const checkUserSession = () => (dispatch, getState) => {
                 type: LOGGED_IN,
                 payload: { currentUser: user }
             });
-            dispatch(StaffActions.getStaffRole(user.uid));
+            dispatch(StaffActions.getStaffProfile(user.uid));
         }
-        
+        dispatch({ type: USERSESSION_CHECKED });
     });
 }
 
@@ -48,13 +54,34 @@ export const logout = () => (dispatch, getState) => {
 }
 
 
-export const assignNewUserRole = (role) => (dispatch, getState) => {
-    dispatch({ type: ASSIGNING_NEW_USER_ROLE });
+export const register = (staffDetails = {}) => (dispatch, getState) => {
+    const {email, password, fullname} = staffDetails;
+    const role = staffDetails.tech ? "tech" : "helpdesk";
 
-    const userId = getState().session.currentUser.uid;
+    dispatch({ type: SIGNING_UP });
 
-    ref.child(`staff/${userId}/role`).set(role, function(){
-        dispatch({ type: NEW_USER_ROLE_ASSIGNED, payload: role })
+    auth().createUserWithEmailAndPassword(email, password).then(function(user){
+        ref.child(`staff/${user.uid}`).set({
+            fullname: fullname,
+        }, function(error){
+            if (error) {
+                dispatch({type: SIGNUP_FAILED, payload: error.message})
+            } else {
+                dispatch({
+                    type: SIGNED_UP, 
+                    payload: {
+                        currentUser: user,
+                        fullname: fullname,
+                        role: role
+                    }
+                })
+            }
+        })
+    })
+    .catch(function(error){
+        dispatch({
+            type: SIGNUP_FAILED,
+            payload: error.message
+        })
     });
-
 }

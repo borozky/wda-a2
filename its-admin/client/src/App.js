@@ -4,6 +4,7 @@ import SiteMain from "./containers/SiteMain";
 import SiteFooter from "./containers/SiteFooter";
 import SignInPage from "./containers/SignInPage";
 import * as SessionActions from "./actions/SessionActions";
+import AssignUserRole from "./containers/AssignUserRole";
 
 import { connect } from "react-redux";
 import {provider, auth} from './client';
@@ -25,10 +26,11 @@ class App extends Component {
     }
 
     render() {
+
         return (
             <div className="site-wrapper">
                 <SiteHeader user={this.props.currentUser} onLogin={this.login} onLogout={this.logout}/>
-                {this.props.currentUser ? <SiteMain /> : <SignInPage/>}
+                {(this.props.currentUser && !this.props.signingUp) ? ((this.props.currentUser.role)?<SiteMain/>:<AssignUserRole/>) : <SignInPage/>}
                 <SiteFooter />
             </div>
         );
@@ -37,7 +39,8 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        currentUser: state.session.currentUser
+        currentUser: state.session.currentUser,
+        signingUp: state.session.signingUp
     }
 }
 

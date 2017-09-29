@@ -10,11 +10,12 @@ const TicketSummary = ({ticket, ticket: {user: user}, onClick, location}) => {
                 <i><small>From: {user.fullname} &lt;{user.email}&gt;</small></i><br/>
             </div>
             <br/>
-            <div>{ticket.details}</div>
+            {/* <div>{ticket.details}</div> */}
             <div>
                 <hr/>
                 <Link to={`/tickets/${ticket.id}`} onClick={onClick} className="btn btn-xs btn-success">View more details</Link>
             </div>
+            
         </div>
     );
 };

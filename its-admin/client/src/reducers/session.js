@@ -5,7 +5,10 @@ import * as StaffActions from "../actions/StaffActions";
 const initialSession = {
     currentUser: null,
     loggingIn: false,
-    assigningRole: false
+    assigningRole: false,
+    signingUp: false,
+    updatingProfile: false,
+    loadingProfile: false,
 }
 
 export default function session(state = initialSession, action){
@@ -21,6 +24,13 @@ export default function session(state = initialSession, action){
                 currentUser: action.payload.currentUser,
                 loggingIn: false
             };
+        case SessionActions.USERSESSION_CHECKED:
+            return {
+                ...state,
+                loggingIn: false,
+                signingUp: false,
+                assigningRole: false
+            };
         case SessionActions.LOGGING_OUT:
         case SessionActions.LOGGED_OUT:
             return {
@@ -28,36 +38,54 @@ export default function session(state = initialSession, action){
                 currentUser: null,
                 loggingIn: false
             }
-        case SessionActions.ASSIGNING_NEW_USER_ROLE:
+        case SessionActions.SIGNING_UP:
             return {
                 ...state,
-                assigningRole: true
+                signingUp: true
             };
-        case SessionActions.NEW_USER_ROLE_ASSIGNED:
+        case SessionActions.SIGNED_UP:
             return {
                 ...state,
-                assigningRole: false,
+                signingUp: false,
                 currentUser: {
-                    ...state.currentUser,
-                    role: action.payload
+                    ...action.payload.currentUser,
+                    role: action.payload.role,
+                    displayName: action.payload.fullname
                 }
+            };
+        case SessionActions.SIGNUP_FAILED:
+            return {
+                ...state,
+                signingUp: false
+            };
+        case StaffActions.UPDATING_STAFF_PROFILE:
+            return {
+                ...state,
+                updatingProfile: true
             }
-        case StaffActions.GETTING_STAFF_ROLE:
-            if (state.currentUser == null) {
-                return state;
+        case StaffActions.STAFF_PROFILE_UPDATED:
+            return {
+                ...state,
+                currentUser: {...state.currentUser, ...action.payload},
+                updatingProfile: false,
             }
-            if (typeof state.currentUser.role == "undefined") {
-                return state;
+        case StaffActions.PROFILE_UPDATE_FAILED:
+            return {
+                ...state,
+                updatingProfile: false
             }
-            if (state.currentUser.uid == action.payload.uid) {
-                return {
-                    ...state,
-                    currentUser: {
-                        ...state.currentUser,
-                        role: action.payload.role
-                    }
-                }
-            }
+
+        case StaffActions.GETTING_STAFF_PROFILE:
+            return { ...state, loadingProfile: true };
+        case StaffActions.STAFF_PROFILE_RETRIEVED:
+            return {
+                ...state,
+                currentUser: {...state.currentUser, ...action.payload},
+                loadingProfile: false
+            };
+        case StaffActions.STAFF_PROFILE_NOT_FOUND:
+            return { ...state, loadingProfile: false }
+
         default:
             return state;
     }

@@ -19,7 +19,7 @@
     "xss": "^0.3.4"
   },
   "scripts": {
-    "start": "PORT=8082 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

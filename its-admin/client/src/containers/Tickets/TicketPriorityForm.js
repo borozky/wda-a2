@@ -7,9 +7,7 @@ import * as TicketActions from "../../actions/TicketActions";
 class TicketPriorityForm extends Component {
     constructor(props){
         super(props);
-
         this.handleSubmit = this.handleSubmit.bind(this);
-
         this.state = {
             priority: this.props.priority
         }
@@ -25,6 +23,11 @@ class TicketPriorityForm extends Component {
     }
 
     render() {
+        let disabledProps = {};
+        if (this.props.updating) {
+            disabledProps.disabled = "Disabled";
+        }
+
         return (
             <form onSubmit={this.handleSubmit}>
                 <b>Priority</b><br/>
@@ -35,9 +38,16 @@ class TicketPriorityForm extends Component {
                     <option value="medium">Medium{this.props.priority === "medium" && " *"}</option>
                     <option value="high">High{this.props.priority === "high" && " *"}</option>
                 </select>
-                { this.state.priority != this.props.priority && <button className="btn btn-xs btn-primary" type="submit">Submit</button> }
+                { this.state.priority != this.props.priority && <button {...disabledProps} className="btn btn-xs btn-primary" type="submit">Submit</button> }
             </form>
         );
+    }
+}
+
+const mapStateToProps = (state, props) => {
+    return {
+        ...props,
+        updating: state.tickets.loading
     }
 }
 
@@ -49,4 +59,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(TicketPriorityForm);
+export default connect(mapStateToProps, mapDispatchToProps)(TicketPriorityForm);

@@ -49,8 +49,8 @@ Route::put("tickets/{ticket}", function(Request $request, App\Ticket $ticket){
     // Doesn't have to fill all fields. 
     $validator = Validator::make($request->all(), [
         "status" => "in:Pending,In Progress,Unresolved,Resolved",
-        "escalation_level" => "in:1,2,3",
-        "priority" => "in:low,medium,high",
+        "escalation_level" => "nullable|in:1,2,3",
+        "priority" => "nullable|in:low,medium,high",
         "assigned_to" => "min:2"
     ]);
 

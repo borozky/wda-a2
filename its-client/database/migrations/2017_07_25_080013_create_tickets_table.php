@@ -23,7 +23,9 @@ class CreateTicketsTable extends Migration
             
             $table->integer("escalation_level")->nullable();
             $table->enum("priority", ["low", "medium", "high"])->nullable();
-            $table->string("assigned_to")->nullable();
+            $table->string("assigned_to_uid")->nullable();
+            $table->string("assigned_to_email")->nullable();
+            $table->string("assigned_to_fullname")->nullable();
             
             $table->timestamps();
         });

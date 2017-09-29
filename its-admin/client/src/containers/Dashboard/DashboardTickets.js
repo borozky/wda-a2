@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import Fuse from "fuse.js";
 import moment from "moment";
 import * as TicketActions from "../../actions/TicketActions";
+import TicketStatusBadge from "../../components/TicketStatusBadge";
 
 const DashboardTicketRow = ({onSelectRow, ticket = {}, active = false}) => {
     const {subject, software_issue, operating_system, id, created_at} = ticket;
@@ -16,6 +17,7 @@ const DashboardTicketRow = ({onSelectRow, ticket = {}, active = false}) => {
                     <span className="ticket-id">#{id}</span>
                 </div>
             </td>
+            <td><TicketStatusBadge status={ticket.status}/></td>
             <td><span className="ticket-assigned_to"></span></td>
             <td><span className="ticket-created_at">{moment(created_at).format("DD/MM/YYYY").toString()}</span></td>
         </tr>
@@ -33,13 +35,15 @@ class DashboardTickets extends Component {
         }
     }
 
-    componentDidMount(){
-        this.props.getAllTickets();
-    }
-
     handleSelectedTicket(e, ticket){
         this.setState({selectedTicket: ticket});
         this.props.onSelectRow(e, ticket);
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            searchedTickets: nextProps.tickets
+        });
     }
 
     handleSearch(event, keyword){
@@ -49,26 +53,23 @@ class DashboardTickets extends Component {
 
     render() {
         return (
-            <DataTable {...this.props} data={this.props.tickets} onSearch={this.handleSearch}>{ (ticket, index) => 
+            <DataTable {...this.props} data={this.state.searchedTickets} onSearch={this.handleSearch}>{ (ticket, index) => 
                 <DashboardTicketRow onSelectRow={this.handleSelectedTicket} key={index} ticket={ticket} active={(this.state.selectedTicket && this.state.selectedTicket.id === ticket.id)}/>
             }</DataTable>
         );
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
     return {
-        tickets: state.tickets.foundTickets,
+        ...props,
         loading: state.tickets.loading,
-        columns: ["Tickets", "Assigned to", "Created"]
+        columns: ["Tickets", "Status", "Assigned to", "Created"]
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getAllTickets: function(){
-            dispatch(TicketActions.getAllTickets());
-        },
         searchTickets: function(keyword){
             dispatch(TicketActions.searchTickets(keyword));
         }

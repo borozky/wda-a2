@@ -14,7 +14,11 @@ export default function staff(state = initialState, action){
             };
         case StaffActions.STAFF_RETRIEVED:
             return {
-                data: action.payload,
+                data: Object.keys(action.payload).map(function(key, index){
+                    let member = {...action.payload[key]};
+                    member.uid = key;
+                    return member;
+                }),
                 loading: false
             };
         default:

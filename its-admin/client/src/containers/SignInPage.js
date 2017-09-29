@@ -4,6 +4,8 @@ import { Route, Redirect } from "react-router-dom";
 import * as SessionActions from "../actions/SessionActions";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
+import RegisterForm from "./RegisterForm";
+import SignInForm from "./SignInForm";
 
 class SignInPage extends Component {
 
@@ -19,9 +21,29 @@ class SignInPage extends Component {
                         </EntryHeader>
                         <div className="site-content">
                             <div className="container">
-                                <button className="btn btn-lg btn-primary" onClick={e => {this.props.onLogin()}}>
-                                    <i className="fa fa-facebook"></i> Login with Facebook
-                                </button>
+                                <div className="row">
+                                    <div className="col-xs-12 col-sm-12">
+                                        <h4>Sign in with Facebook <br/><small>Signing in using Facebook is recommended.</small></h4>
+                                        <button className="btn btn-lg btn-primary" onClick={e => {this.props.onLogin()}}>
+                                            <i className="fa fa-facebook"></i> Login with Facebook
+                                        </button>
+                                        <hr/>
+                                        <br/>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-xs-12 col-sm-4">
+                                        <SignInForm />
+                                    </div>
+                                    <div className="col-xs-12 col-sm-4">
+                                        <RegisterForm />
+                                    </div>
+                                </div>
+                                
+                                <br/>
+
+                                
+                                
                             </div>
                         </div>
                     </div>

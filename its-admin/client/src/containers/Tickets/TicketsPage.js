@@ -5,6 +5,7 @@ import faker from "faker";
 import { Redirect, Link } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
 import moment from "moment";
 import * as TicketActions from "../../actions/TicketActions";
 import TicketStatusBadge from "../../components/TicketStatusBadge";
@@ -16,10 +17,24 @@ class TicketsPage extends Component {
         super(props);
         this.handleOnSelectRow = this.handleOnSelectRow.bind(this);
         this.handleOnSearch = this.handleOnSearch.bind(this);
+
+        this.filterTicketStatus = this.filterTicketStatus.bind(this);
+        this.filterTicketEscalation = this.filterTicketEscalation.bind(this);
+        this.filterTicketPriority = this.filterTicketPriority.bind(this);
+
+        this.state = {
+            filteredTickets: this.props.tickets
+        }
     }
 
     componentDidMount(){
         this.props.getAllTickets();
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            filteredTickets: nextProps.tickets
+        });
     }
 
     handleOnSelectRow(event, ticket){
@@ -36,6 +51,45 @@ class TicketsPage extends Component {
         this.props.searchTickets(keyword);
     }
 
+    filterTicketStatus(event, statuses = []){
+        if (statuses.length == 0) {
+            this.setState({filteredTickets: this.props.tickets});
+            return;
+        }
+
+        const filteredTickets = this.props.tickets.filter((ticket, index) => {
+            return statuses.indexOf(ticket.status) > -1;
+        })
+
+        this.setState({ filteredTickets: filteredTickets })
+    }
+
+    filterTicketEscalation(event, escalationLevels = []){
+        if (escalationLevels.length == 0) {
+            this.setState({ filteredTickets: this.props.tickets });
+            return;
+        }
+
+        const filteredTickets = this.props.tickets.filter((ticket, index) => {
+            return escalationLevels.indexOf(ticket.escalation_level) > -1
+        })
+
+        this.setState({ filteredTickets: filteredTickets })
+    }
+
+    filterTicketPriority(event, priorityLevels = []){
+        if (priorityLevels.length == 0) {
+            this.setState({ filteredTickets: this.props.tickets });
+            return;
+        }
+
+        const filteredTickets = this.props.tickets.filter((ticket, index) => {
+            return priorityLevels.indexOf(ticket.priority) > -1
+        })
+
+        this.setState({ filteredTickets: filteredTickets })
+    }
+
     render(){
         const {tickets, searchableItems, columns, loading, searchTickets} = this.props;
 
@@ -48,10 +102,12 @@ class TicketsPage extends Component {
                     <FixedWidthSidebar direction="left">
                         <Sidebar>
                             <h4>Filter</h4>
-                            { this.props.filterSettings.map((setting, index) => <TicketFilterForm {...setting}/>)}
+                            <TicketFilterForm {...this.props.filterSettings[0]} onSubmit={this.filterTicketStatus}/>
+                            <TicketFilterForm {...this.props.filterSettings[1]} onSubmit={this.filterTicketEscalation}/>
+                            <TicketFilterForm {...this.props.filterSettings[2]} onSubmit={this.filterTicketPriority}/>
                         </Sidebar>
                         <ResponsiveContent style={{paddingRight: 20}}>
-                            <DataTable onSearch={this.handleOnSearch} loading={loading} data={tickets} columns={columns} style={{maxWidth: "100%"}}>{(ticket, index) => 
+                            <DataTable onSearch={this.handleOnSearch} loading={loading} data={this.state.filteredTickets} columns={columns} style={{maxWidth: "100%"}}>{(ticket, index) => 
                                 <tr key={index}>
                                     <td>
                                         <div className="ticket-summary">
@@ -113,6 +169,11 @@ const mapStateToProps = (state) => {
                 name: "ticket-escalation",
                 filters: [
                     {
+                        label: "No escalation level",
+                        defaultValue: null,
+                        id: "TicketEscalationNoLevel"
+                    },
+                    {
                         label: "Level 1",
                         defaultValue: 1,
                         id: "TicketEscalationLevel1"
@@ -133,6 +194,11 @@ const mapStateToProps = (state) => {
                 title: "Priority",
                 name: "ticket-priority",
                 filters: [
+                    {
+                        label: "No priority",
+                        defaultValue: null,
+                        id: "TicketPriority-PriorityNotAssigned"
+                    },
                     {
                         label: "Low",
                         defaultValue: "low",
@@ -166,4 +232,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TicketsPage);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TicketsPage));

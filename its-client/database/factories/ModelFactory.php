@@ -40,7 +40,7 @@ $factory->define(App\Ticket::class, function(Faker\Generator $faker){
 
 $factory->define(App\Comment::class, function(Faker\Generator $faker){
     return [
-        "details" => $faker->text(1000),
+        "details" => $faker->text(120),
         "commentor_id" => str_random(32),
         "commentor_email" => $faker->email,
         "commentor_fullname" => $faker->name

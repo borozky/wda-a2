@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { withRouter} from "react-router-dom";
 
 import EntryHeader from "../../components/EntryHeader";
 import DashboardSection from "./DashboardSection";
-import DashboardSection_NewTickets from "./DashboardSection_NewTickets";
+import DashboardSection_Tickets from "./DashboardSection_Tickets";
+import DashboardSection_AssignedTickets from "./DashboardSection_AssignedTickets";
 
 import "../../stylesheets/TicketList.css";
 import "../../stylesheets/Dashboard.css";
@@ -18,7 +20,8 @@ class DashboardPage extends Component {
                     </h3>
                 </EntryHeader>
                 <div className="site-content">
-                    <DashboardSection_NewTickets/>
+                    <DashboardSection_AssignedTickets />
+                    <DashboardSection_Tickets/>
                     <DashboardSection title="Users">
                         Users
                     </DashboardSection>
@@ -35,4 +38,4 @@ const mapStateToProps = (state) => {
 }
 
 
-export default connect(mapStateToProps)(DashboardPage);
+export default withRouter(connect(mapStateToProps)(DashboardPage));

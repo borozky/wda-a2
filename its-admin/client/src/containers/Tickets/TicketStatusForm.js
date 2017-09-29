@@ -26,6 +26,12 @@ class TicketStatusForm extends Component {
     }
 
     render() {
+        let disabledProps = {};
+        if (this.props.updating) {
+            disabledProps.disabled = "Disabled";
+        }
+
+
         return (
             <div className="ticket-status-form">
                 <form onSubmit={this.handleOnSubmit}>
@@ -36,11 +42,18 @@ class TicketStatusForm extends Component {
                     <option value="Unresolved">Unresolved{this.props.status == "Unresolved" && " *"}</option>
                     <option value="Resolved">Resolved{this.props.status == "Resolved" && " *"}</option>
                 </select>
-                { this.state.status !== this.props.status && <button className="btn btn-xs btn-primary" type="submit">Update</button> }
+                { this.state.status !== this.props.status && <button {...disabledProps} className="btn btn-xs btn-primary" type="submit">Update</button> }
                 </form>
             </div>
             
         );
+    }
+}
+
+const mapStateToProps = (state, props) => {
+    return {
+        ...props,
+        updating: state.tickets.loading
     }
 }
 
@@ -52,4 +65,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(TicketStatusForm);
+export default connect(mapStateToProps, mapDispatchToProps)(TicketStatusForm);

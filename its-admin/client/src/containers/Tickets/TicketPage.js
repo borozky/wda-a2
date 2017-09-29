@@ -8,6 +8,7 @@ import Comments from "./Comments";
 import TicketStatusForm from "./TicketStatusForm";
 import EscalationLevelForm from "./EscalationLevelForm";
 import TicketPriorityForm from "./TicketPriorityForm";
+import AssignToStaffForm from "./AssignToStaffForm";
 import moment from "moment";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -66,6 +67,8 @@ class TicketPage extends Component {
                                 <TicketStatusForm ticket={ticket} status={ticket.status}/>
                                 <EscalationLevelForm ticket={ticket} escalationLevel={ticket.escalation_level} />
                                 <TicketPriorityForm ticket={ticket} priority={ticket.priority || ""}/>
+                                <AssignToStaffForm ticket={ticket} assignedTo={ticket.assignedTo || ""} staff={this.props.staff} />
+
                                 <p>
                                     <b>Submitted by: </b><br/>
                                     <span>{ticket.user.fullname}</span>
@@ -125,6 +128,7 @@ const mapStateToProps = (state, props) => {
         ticket: foundTicket,
         currentUser: state.session.currentUser,
         comments: sortedComments,
+        staff: state.staff.data
     };
 }
 
