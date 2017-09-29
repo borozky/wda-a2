@@ -2,7 +2,6 @@ import { createStore, applyMiddleware } from "redux";
 import reducers from "./reducers/index"; 
 import thunk from "redux-thunk";
 
-//store.subscribe(() => console.log("State", store.getState()));
 const stateLogger = store => next => action => {
     let result;
     console.groupCollapsed(`DISPATCHING ${action.type}`);
@@ -26,7 +25,6 @@ const checkAuth = store => next => action => {
 }
 
 const checkUserRole = store => next => action => {
-
     let result;
     result = next(action);
     let session = store.getState().session;
@@ -36,10 +34,8 @@ const checkUserRole = store => next => action => {
             console.log("CURRENT USER HAS NO ROLE");
         }
     }
-
     return result; 
 }
-
 
 export default (initialState = {}) => {
     return applyMiddleware(thunk, stateLogger, checkAuth, checkUserRole)(createStore)(reducers, initialState);
