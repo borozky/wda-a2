@@ -5,6 +5,7 @@ import DashboardPage from "./Dashboard/DashboardPage";
 import TicketsPage from "./Tickets/TicketsPage";
 import TicketPage from "./Tickets/TicketPage";
 import LeaderboardsPage from "./Leaderboards/LeaderboardsPage";
+import AccountPage from "./Account/AccountPage";
 
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom'
@@ -21,6 +22,7 @@ class SiteMain extends Component {
                     <Route exact path="/tickets" component={TicketsPage}/>
                     <Route exact path="/tickets/:id" component={TicketPage} />
                     <Route path="/leaderboards" component={LeaderboardsPage} />
+                    <Route path="/account" component={AccountPage} />
                 </Switch>
             </div>
         );
