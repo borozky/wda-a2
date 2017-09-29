@@ -20,8 +20,9 @@ export const checkUserSession = () => (dispatch, getState) => {
                 type: LOGGED_IN,
                 payload: { currentUser: user }
             });
+            dispatch(StaffActions.getStaffRole(user.uid));
         }
-        dispatch(StaffActions.getStaffRole(user.uid));
+        
     });
 }
 
