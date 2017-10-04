@@ -64,6 +64,8 @@ class TicketsController extends Controller
         return back()->with("danger", "Something went wrong while submitting a ticket");;
     }
 
+        
+
 
     
 }
