@@ -1,0 +1,48 @@
+@import "common.css";
+@import 'fixed-width-sidebar.css';
+@import "site-header.css";
+@import "site-sidebar.css";
+@import "site-footer.css";
+@import "validation-errors.css";
+@import "bootstrap-overrides.css";
+
+@import "entry-header.css";
+
+@import 'Tickets.css';
+@import 'Users.css';
+@import "Auth.css";
+
+.site-content {
+    margin-top: 15px;
+}
+
+.site-content a {
+  text-decoration: underline;
+}
+
+.site-content a:hover {
+  text-decoration: none;
+}
+.site-content a.btn {
+  text-decoration: none;
+}
+
+
+.entry {
+    z-index: 9999;
+    background-color: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+    border-radius: 2px;
+    margin-bottom: 30px;
+}
+
+.site-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1;
+}

@@ -1,0 +1,39 @@
+
+
+
+
+.tickets-table {
+}
+
+.tickets-table .ticket-summary {
+    position: relative;
+    padding-right: 40px;
+}
+
+.tickets-table .ticket-summary .ticket-subject {
+}
+
+.tickets-table .ticket-summary .ticket-id {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    font-size: 12px;
+    color: #868686;
+}
+
+td.ticket-priority-low {
+    background-color: #fff;
+    text-align: center;
+
+}
+td.ticket-priority-medium {
+    background-color: #f5e5c9;
+    text-align: center;
+}
+td.ticket-priority-high {
+    background-color: #000000;
+    color: #fff !important;
+    text-align: center;
+}
+
+
