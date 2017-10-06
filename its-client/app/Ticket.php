@@ -18,7 +18,9 @@ class Ticket extends Model
         "status",
         "escalation_level",
         "priority",
-        "assigned_to"
+        "assigned_to_uid",
+        "assigned_to_email",
+        "assigned_to_fullname"
     ];
     
     public function user(){
