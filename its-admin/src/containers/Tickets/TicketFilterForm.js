@@ -50,7 +50,7 @@ class TicketFilterForm extends Component {
                         )}
                     </tbody>
                 </table>
-                <input type="submit" className="btn btn-xs"/>
+                <input type="submit" className="btn btn-xs btn-default" style={{padding: "3px 20px"}}/>
             </form>
         );
     }

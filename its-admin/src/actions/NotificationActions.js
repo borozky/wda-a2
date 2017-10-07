@@ -10,6 +10,7 @@ export const ALERT_TYPE = {
     DANGER: "ALERT_TYPE_DANGER"
 }
 
+
 export function emitNotification(message, type = ALERT_TYPE.INFO){
     return {
         type: EMIT_NOTIFICATION,

@@ -1,0 +1,50 @@
+#UpdateTicketForm {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #efefef;
+    margin-bottom: 15px;
+}
+
+#UpdateTicketForm .loading-layer {
+    display: none;
+}
+
+#UpdateTicketForm.loading {
+    position: relative;
+    display: block;
+}
+
+#UpdateTicketForm.loading .loading-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    background-color: rgba(255, 255, 255, 0.62);
+}
+
+/* https://css-tricks.com/centering-in-the-unknown/ */
+#UpdateTicketForm.loading .loading-layer:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -0.25em;
+}
+
+#UpdateTicketForm.loading .loading-layer .spinner {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin-left: 13px;
+    margin-top: -9px;
+}
+
+#UpdateTicketForm button[type='submit'] {
+    padding: 7px 38px;
+    font-size: 12px;
+}

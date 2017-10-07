@@ -2,6 +2,9 @@ import { createStore, applyMiddleware } from "redux";
 import reducers from "./reducers/index"; 
 import thunk from "redux-thunk";
 
+import * as StaffActions from "./actions/StaffActions";
+import * as SessionActions from "./actions/SessionActions";
+
 const stateLogger = store => next => action => {
     let result;
     console.groupCollapsed(`DISPATCHING ${action.type}`);
@@ -12,33 +15,36 @@ const stateLogger = store => next => action => {
     return result;
 }
 
-const checkAuth = store => next => action => {
-
+const onSwitchRole = store => next => action => {
     let result;
-    result = next(action);
+    let previousUser = store.getState().session.currentUser;
+    
+    result = next(action)
 
-    let session = store.getState().session;
-    if (session.currentUser == null) {
-        console.log("USER IS NOT LOGGED IN");
+    if ( ! previousUser ) {
+        return result;
     }
-    return result;  
-}
 
-const checkUserRole = store => next => action => {
-    let result;
-    result = next(action);
-    let session = store.getState().session;
-
-    if (session.currentUser) {
-        if (typeof session.currentUser.role == "undefined") {
-            console.log("CURRENT USER HAS NO ROLE");
-        }
+    if ( previousUser.role == null ) {
+        return result;
     }
-    return result; 
+
+    let previousRole = previousUser.role_level;
+    if ( ! store.getState().session.currentUser) {
+        return result;
+    }
+    let newRole = store.getState().session.currentUser.role_level;
+
+    if (previousRole != newRole) {
+        alert("CURRENT ROLE HAS  BEEN CHANGED");
+        console.log("CURRENT ROLE HAS BEEN CHANGED");
+    }
+
+    return result;
 }
 
 export default (initialState = {}) => {
-    return applyMiddleware(thunk, stateLogger, checkAuth, checkUserRole)(createStore)(reducers, initialState);
+    return applyMiddleware(thunk, stateLogger, onSwitchRole)(createStore)(reducers, initialState);
 }
 
 

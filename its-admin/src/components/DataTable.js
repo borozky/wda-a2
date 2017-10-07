@@ -52,7 +52,7 @@ class DataTable extends Component {
     constructor(props){
         super(props);
         this.data = props.data; // cache data here
-        this.state = { currentPage: this.props.currentPage, itemsPerPage: this.props.itemsPerPage, data: [], searchTerm: "" };
+        this.state = { currentPage: this.props.currentPage, itemsPerPage: this.props.itemsPerPage, data: this.props.data, searchTerm: "" };
         this.firstItemIndex = this.firstItemIndex.bind(this);
         this.numPages = this.numPages.bind(this);
         this.displayedData = this.displayedData.bind(this);
@@ -73,7 +73,7 @@ class DataTable extends Component {
         console.log(nextProps);
         this.data = nextProps.data;
         this.setState({ 
-            data: this.data 
+            data: nextProps.data 
         });
     }
 

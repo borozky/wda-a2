@@ -25,8 +25,9 @@
 .datatable tr {
 
 }
-.datatable tr:hover {
+.datatable tbody tr:hover {
     cursor: pointer;
+    background-color: #f1f1fd;
 }
 
 

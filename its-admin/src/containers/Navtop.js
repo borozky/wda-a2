@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AccountStatus from "../components/AccountStatus";
+import SwitchRoleForm from "../containers/SwitchRoleForm";
 
 class Navtop extends Component {
     render() {
@@ -7,8 +8,9 @@ class Navtop extends Component {
             <div id="Navtop">
                 <div className="container clearfix">
                     <ul id="Navtop-left" className="hidden-xs">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">FAQ</a></li>
+                        <li>
+                            <SwitchRoleForm />
+                        </li>
                     </ul>
                     <ul id="Navtop-right">
                         <AccountStatus />

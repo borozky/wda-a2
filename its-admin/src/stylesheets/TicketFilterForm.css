@@ -1,7 +1,11 @@
 .ticket-filter-form {
     margin-bottom: 10px;
     margin-top: 10px;
-    padding: 5px 0;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    margin-right: 15px;
 }
 
 .ticket-filter-form table {

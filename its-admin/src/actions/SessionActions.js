@@ -57,13 +57,16 @@ export const logout = () => (dispatch, getState) => {
 export const register = (staffDetails = {}) => (dispatch, getState) => {
     const {email, password, fullname} = staffDetails;
     const role = staffDetails.tech ? "tech" : "helpdesk";
+    const role_level = Number(staffDetails.role_level) ? Number(staffDetails.role_level) : 0;
 
     dispatch({ type: SIGNING_UP });
 
     auth().createUserWithEmailAndPassword(email, password).then(function(user){
         ref.child(`staff/${user.uid}`).set({
             fullname: fullname,
-            email: email
+            email: email,
+            role: role,
+            role_level: role_level
         }, function(error){
             if (error) {
                 dispatch({type: SIGNUP_FAILED, payload: error.message})

@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import * as SessionActions from "../actions/SessionActions";
+
+import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
 
 class SignInForm extends Component {
 
@@ -7,20 +11,19 @@ class SignInForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {
-            email: "",
-            password: "",
-            fullname: "",
-            tech: false,
+            username: "",
+            password: ""
         }
     }
 
     handleSubmit(event){
-
+        event.preventDefault();
+        this.props.login(this.state.username, this.state.password);
     }
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit} className="signin-form">
+            <form onSubmit={this.handleSubmit} className="signin-form" method="POST">
                 <h4>Sign in<br/>
                 <small> Sign in with your email and password</small></h4>
                 <table>
@@ -42,6 +45,14 @@ class SignInForm extends Component {
                 </table>
             </form>
         );
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        login: function(username, password){
+            
+        }
     }
 }
 

@@ -5,6 +5,7 @@ import Fuse from "fuse.js";
 import moment from "moment";
 import * as TicketActions from "../../actions/TicketActions";
 import TicketStatusBadge from "../../components/TicketStatusBadge";
+import {withRouter} from "react-router-dom";
 
 const DashboardTicketRow = ({onSelectRow, ticket = {}, active = false}) => {
     const {subject, software_issue, operating_system, id, created_at} = ticket;
@@ -41,7 +42,7 @@ class DashboardTickets extends Component {
 
     handleSelectedTicket(e, ticket){
         this.setState({selectedTicket: ticket});
-        this.props.onSelectRow(e, ticket);
+        this.props.history.push(`/tickets/${ticket.id}`);
     }
 
     componentWillReceiveProps(nextProps){
@@ -57,9 +58,12 @@ class DashboardTickets extends Component {
 
     render() {
         return (
-            <DataTable {...this.props} data={this.state.searchedTickets} onSearch={this.handleSearch}>{ (ticket, index) => 
-                <DashboardTicketRow onSelectRow={this.handleSelectedTicket} key={index} ticket={ticket} active={(this.state.selectedTicket && this.state.selectedTicket.id === ticket.id)}/>
-            }</DataTable>
+            <div>
+                {this.props.title && <h4>{this.props.title}</h4> }
+                <DataTable {...this.props} data={this.state.searchedTickets} onSearch={this.handleSearch}>{ (ticket, index) => 
+                    <DashboardTicketRow onSelectRow={this.handleSelectedTicket} key={index} ticket={ticket} active={(this.state.selectedTicket && this.state.selectedTicket.id === ticket.id)}/>
+                }</DataTable>
+            </div>
         );
     }
 }
@@ -72,7 +76,7 @@ const mapStateToProps = (state, props) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, props) => {
     return {
         searchTickets: function(keyword){
             dispatch(TicketActions.searchTickets(keyword));
@@ -80,4 +84,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardTickets);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DashboardTickets));

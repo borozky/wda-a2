@@ -29,7 +29,9 @@ class TicketsPage extends Component {
     }
 
     componentDidMount(){
-        this.props.getAllTickets();
+        if (this.props.tickets.length == 0) {
+            this.props.getAllTickets();
+        }
     }
 
     componentWillReceiveProps(nextProps){
@@ -53,6 +55,7 @@ class TicketsPage extends Component {
     }
 
     filterTicketStatus(event, statuses = []){
+        // show all tickets when doing empty search
         if (statuses.length == 0) {
             this.setState({filteredTickets: this.props.tickets});
             return;
@@ -109,12 +112,10 @@ class TicketsPage extends Component {
                         </Sidebar>
                         <ResponsiveContent style={{paddingRight: 20}}>
                             <DataTable onSearch={this.handleOnSearch} loading={loading} data={this.state.filteredTickets} columns={columns} style={{maxWidth: "100%"}}>{(ticket, index) => 
-                                <tr key={index}>
+                                <tr key={index} onClick={e => {this.props.history.push(`/tickets/${ticket.id}`)}}>
                                     <td>
                                         <div className="ticket-summary">
-                                            <Link to={`/tickets/${ticket.id}`}>
-                                                <b className="ticket-subject">{ticket.subject}</b>
-                                            </Link><br/>
+                                            <b className="ticket-subject">{ticket.subject}</b><br/>
                                             <small className="ticket-meta">{ticket.software_issue} ({ticket.operating_system})</small>
                                             <span className="ticket-id">#{ticket.id}</span>
                                         </div>

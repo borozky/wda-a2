@@ -1,0 +1,29 @@
+#SwitchRoleForm {}
+
+#SwitchRoleForm form {
+    padding: 10px 15px;
+    color: #000;
+    width: 200px;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+
+#SwitchRoleForm form label {
+    font-weight: normal;
+    vertical-align: top;
+    font-size: 12px;
+}
+
+#SwitchRoleForm > button {
+    background-color: transparent;
+    color: #fff;
+}
+
+#SwitchRoleForm > button:hover {
+    color: #fff;
+}
+
+#SwitchRoleForm form button {
+    padding: 3px 21px;
+    margin-top: 10px;
+}

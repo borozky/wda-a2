@@ -4,11 +4,11 @@ import SiteMain from "./containers/SiteMain";
 import SiteFooter from "./containers/SiteFooter";
 import SignInPage from "./containers/SignInPage";
 import * as SessionActions from "./actions/SessionActions";
-import AssignUserRole from "./containers/AssignUserRole";
+import LoadingLayer from "./components/LoadingLayer";
 
 import { connect } from "react-redux";
 import {provider, auth} from './client';
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 
 class App extends Component {
     constructor(props){
@@ -26,21 +26,39 @@ class App extends Component {
     }
 
     render() {
+        // if current user is not logged in and not in the sign-in page
+        // Go to SIGN IN PAGE
+        if (this.props.currentUser == null && this.props.location.pathname.indexOf("/signin") == -1) {
+            return <Redirect to="/signin"/>
+        }
 
-        return (
-            <div className="site-wrapper">
-                <SiteHeader user={this.props.currentUser} onLogin={this.login} onLogout={this.logout}/>
-                {(this.props.currentUser && !this.props.signingUp) ? ((this.props.currentUser.role)?<SiteMain/>:<AssignUserRole/>) : <SignInPage/>}
-                <SiteFooter />
-            </div>
-        );
+        // if logged in and inside the signin page
+        // Go to DASHBOARD PAGE
+        else if (this.props.currentUser != null && this.props.location.pathname.indexOf("/signin") > -1) {
+            return <Redirect to="/dashboard"/>
+        } 
+
+        // RENDER THE APP
+        else {
+            return (
+                <div className={this.props.loggingIn ? "site-wrapper loading" : "site-wrapper"}>
+                    <SiteHeader user={this.props.currentUser} onLogin={this.login} onLogout={this.logout}/>
+                    {(this.props.currentUser && !this.props.signingUp) ? <SiteMain/> : <SignInPage/>}
+                    <SiteFooter />
+                    <LoadingLayer />
+                </div>
+            );
+        }
+
+        
     }
 }
 
 const mapStateToProps = (state) => {
     return {
         currentUser: state.session.currentUser,
-        signingUp: state.session.signingUp
+        signingUp: state.session.signingUp,
+        loggingIn: state.session.loggingIn
     }
 }
 

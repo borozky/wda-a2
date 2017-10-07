@@ -10,6 +10,8 @@ import SignInForm from "./SignInForm";
 class SignInPage extends Component {
 
     render() {
+
+
         return (
             <div className="site-main">
                 <Route path="signin">                  
@@ -31,19 +33,18 @@ class SignInPage extends Component {
                                         <br/>
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <div className="col-xs-12 col-sm-4">
-                                        <SignInForm />
+                                {
+                                    process.env.REACT_APP_ENABLE_CREATE_ACCOUNT_WITH_EMAIL_PASSWORD &&
+                                    <div className="row">
+                                        <div className="col-xs-12 col-sm-4">
+                                            <SignInForm />
+                                        </div>
+                                        <div className="col-xs-12 col-sm-4">
+                                            <RegisterForm />
+                                        </div>
                                     </div>
-                                    <div className="col-xs-12 col-sm-4">
-                                        <RegisterForm />
-                                    </div>
-                                </div>
-                                
+                                }
                                 <br/>
-
-                                
-                                
                             </div>
                         </div>
                     </div>

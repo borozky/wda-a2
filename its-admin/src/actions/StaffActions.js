@@ -11,6 +11,8 @@ export const UPDATING_STAFF_PROFILE = "UPDATING_STAFF_PROFILE";
 export const STAFF_PROFILE_UPDATED = "STAFF_PROFILE_UPDATED";
 export const PROFILE_UPDATE_FAILED = "PROFILE_UPDATE_FAILED";
 
+
+// Get all staff members who manage tickets
 export const getAllStaff = () => (dispatch, getState) => {
     dispatch({
         type: GETTING_ALL_STAFF
@@ -23,6 +25,8 @@ export const getAllStaff = () => (dispatch, getState) => {
     });
 }
 
+// Get staff profile information
+// This includes their fullname, email, role, role level and UID
 export const getStaffProfile = (userID) => (dispatch, getState) => {
     dispatch({ type: GETTING_STAFF_PROFILE });
 
@@ -40,6 +44,8 @@ export const getStaffProfile = (userID) => (dispatch, getState) => {
     });
 }
 
+
+// Update staff profile
 export const updateStaffProfile = (userID, profile = {}) => (dispatch, getState) => {
     dispatch({ type: UPDATING_STAFF_PROFILE });
 

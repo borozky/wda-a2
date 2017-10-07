@@ -1,0 +1,5 @@
+#DashboardNavigation a.list-group-item {
+    text-decoration: none;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}

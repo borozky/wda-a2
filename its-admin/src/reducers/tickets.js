@@ -5,7 +5,8 @@ const initialState = {
     data: [],
     foundTickets: [],
     searchTerm: "",
-    loading: false
+    loading: false,
+    updating: false,
 }
 
 export default function tickets(state = initialState, action){
@@ -38,12 +39,14 @@ export default function tickets(state = initialState, action){
         case TicketActions.UPDATING_TICKET:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                updating: true,
             };
         case TicketActions.TICKET_UPDATED:
             return {
                 ...state,
                 loading: false,
+                updating: false,
                 data: state.data.map((item, index) => {
                     if (action.payload.id === item.id) {
                         return {
@@ -51,13 +54,22 @@ export default function tickets(state = initialState, action){
                             ...action.payload
                         };
                     }
-
                     return item;
-                })
+                }),
+                foundTickets: state.foundTickets.map((item, index) => {
+                    if (action.payload.id === item.id) {
+                        return {
+                            ...item,
+                            ...action.payload
+                        };
+                    }
+                    return item;
+                }),
             }
         case TicketActions.TICKET_UPDATE_FAILED:
             return {
                 ...state,
+                updating: false,
                 loading: false
             }
         default:

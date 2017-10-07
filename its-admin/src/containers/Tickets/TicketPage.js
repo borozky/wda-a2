@@ -4,11 +4,9 @@ import { Link } from "react-router-dom";
 import { FixedWidthSidebar, Sidebar, ResponsiveContent } from "../../components/FixedWidthSidebar";
 import * as TicketActions from "../../actions/TicketActions";
 import * as CommentActions from "../../actions/CommentActions";
+import * as StaffActions from "../../actions/StaffActions";
 import Comments from "./Comments";
-import TicketStatusForm from "./TicketStatusForm";
-import EscalationLevelForm from "./EscalationLevelForm";
-import TicketPriorityForm from "./TicketPriorityForm";
-import AssignToStaffForm from "./AssignToStaffForm";
+import UpdateTicketForm from "./UpdateTicketForm";
 import moment from "moment";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -45,6 +43,9 @@ class TicketPage extends Component {
     componentDidMount(){
         console.log("TICKET ID", this.props.match.params.id);
         this.props.getCommentsByTicketID(this.props.match.params.id);
+
+        this.props.getAllStaff();
+
     }
 
     render() {
@@ -74,10 +75,7 @@ class TicketPage extends Component {
                     <div className="site-content">
                         <FixedWidthSidebar direction="right">
                             <Sidebar>
-                                <TicketStatusForm ticket={ticket} status={ticket.status}/>
-                                <EscalationLevelForm ticket={ticket} escalationLevel={ticket.escalation_level} />
-                                <TicketPriorityForm ticket={ticket} priority={ticket.priority || ""}/>
-                                <AssignToStaffForm ticket={ticket} assignedTo={ticket.assigned_to_uid || ""} staff={this.props.staff} />
+                                <UpdateTicketForm ticket={ticket} staff={this.props.staff}/>
 
                                 <p>
                                     <b>Submitted by: </b><br/>
@@ -100,10 +98,10 @@ class TicketPage extends Component {
                                 </div>
                                 <hr/>
                                 <div className="ticket-comment-area">
-                                    <form onSubmit={ this.addComment } style={{height: 200}}>
+                                    <form onSubmit={ this.addComment }>
                                         <b>Add comment</b><br/>
                                         <ReactQuill value={this.state.comment} onChange={this.handleEditorChange}/>
-                                        <button type="submit" id="SubmitCommentButton" className="btn btn-xs btn-success">Submit comment</button>
+                                        <button type="submit" id="SubmitCommentButton" className="btn btn-md btn-success">Submit comment</button>
                                     </form>
                                     <hr/>
                                     <b>Comments</b>
@@ -159,7 +157,10 @@ const mapDispatchToProps = (dispatch) => {
         },
         getCommentsByTicketID: function(ticketID){
             dispatch(CommentActions.getCommentsByTicketID(ticketID));
-        }
+        },
+        getAllStaff: function(){
+            dispatch(StaffActions.getAllStaff());
+        },
     }
 }
 

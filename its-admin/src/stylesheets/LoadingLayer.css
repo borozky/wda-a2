@@ -1,0 +1,40 @@
+.loading-layer {
+    display: none;
+}
+
+.loading {
+    position: relative;
+    display: block;
+}
+
+.loading .loading-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #005453;
+    color: #fff;
+}
+
+
+/* https://css-tricks.com/centering-in-the-unknown/ */
+.loading .loading-layer:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -0.25em;
+}
+
+.loading .loading-layer .spinner {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin-left: 13px;
+    margin-top: -9px;
+}

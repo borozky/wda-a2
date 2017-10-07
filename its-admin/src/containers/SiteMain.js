@@ -13,7 +13,6 @@ import { withRouter } from 'react-router-dom'
 
 class SiteMain extends Component {
     render() {
-        console.log(this.props);
         return (
             <div className="site-main">
                 <Switch>

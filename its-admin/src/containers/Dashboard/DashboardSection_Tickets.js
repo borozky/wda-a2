@@ -22,25 +22,22 @@ class DashboardSection_Tickets extends Component {
     handleOnSelectRow(event, ticket){
         console.log("EVENT", event);
         console.log("CLICKED_TICKET", ticket);
-        this.setState({selectedTicket: ticket})
+
+        this.props.history.push("/tickets/" + ticket.id);
+        //this.setState({selectedTicket: ticket});
     }
 
-    componentDidMount(){
-        this.props.getAllTickets();
+    componentWillReceiveProps(nextProps){
+        console.log("NEXT PROPS TICKETS", nextProps.tickets);
+        this.setState({
+            tickets: nextProps.tickets
+        });
     }
 
     render() {
         return (
             <DashboardSection title="Pending Tickets">
-                <div className="row">
-                    <div className="col-xs-12 col-sm-8">
-                        <DashboardTickets onSelectRow={this.handleOnSelectRow} tickets={this.props.tickets}/>
-                    </div>
-                    <div className="col-xs-12 col-sm-4">{this.state.selectedTicket ?
-                        <TicketSummary ticket={this.state.selectedTicket}/> :
-                        <span>Select a ticket to preview</span>
-                    }</div>
-                </div>
+                <DashboardTickets onSelectRow={this.handleOnSelectRow} tickets={this.state.tickets}/>
             </DashboardSection>
         );
     }
