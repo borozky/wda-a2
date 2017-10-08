@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {NavLink} from "react-router-dom";
+import {NavLink, Link} from "react-router-dom";
 
 class NavBottom extends Component {
     render() {
@@ -12,13 +12,12 @@ class NavBottom extends Component {
                         <span className="icon-bar"></span>
                         <span className="icon-bar"></span>
                     </button>
-                    <a href="#" className="navbar-brand">ITS Ticketing System</a>
+                    <Link to="/dashboard" className="navbar-brand">ITS Ticketing System</Link>
                 </div>
                 <div id="Navbar" className="collapse navbar-collapse">
                     <ul className="nav navbar-nav navbar-right">
                         <li><NavLink to="/dashboard" activeClassName="active"><i className="fa fa-tachometer"></i>&nbsp; Dashboard</NavLink></li>
                         <li><NavLink to="/tickets" activeClassName="active"><i className="fa fa-ticket"> </i>&nbsp; Tickets</NavLink></li>
-                        <li><NavLink to="/leaderboards" activeClassName="active"><i className="fa fa-bar-chart"> </i>&nbsp; Leaderboards</NavLink></li>
                     </ul>
                 </div>
             </div>

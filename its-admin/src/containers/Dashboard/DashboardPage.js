@@ -48,10 +48,10 @@ class DashboardPage extends Component {
                 <div className="site-content">
                     <div className="container">
                         <FixedWidthSidebar direction="left">
-                            <Sidebar width={220}>
+                            <Sidebar width={240}>
                                 <DashboardNavigation />
                             </Sidebar>
-                            <ResponsiveContent style={{paddingLeft: 15, marginLeft: 220}}>
+                            <ResponsiveContent style={{paddingLeft: 15, marginLeft: 240}}>
                                 <Switch>
                                     <Route path="/dashboard/assigned-tickets">
                                         <DashboardTickets tickets={this.props.assignedTickets} title="Assigned tickets"/>

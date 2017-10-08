@@ -10,6 +10,7 @@ import UpdateTicketForm from "./UpdateTicketForm";
 import moment from "moment";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import LoadingLayer from "../../components/LoadingLayer";
 
 import "../../stylesheets/TicketPage.css";
 
@@ -40,9 +41,15 @@ class TicketPage extends Component {
         this.setState({ comment: value });
     }
 
+    componentWillReceiveProps(nextProps){
+
+    }
+
     componentDidMount(){
         console.log("TICKET ID", this.props.match.params.id);
-        this.props.getCommentsByTicketID(this.props.match.params.id);
+        if (this.props.comments.length == 0) {
+            this.props.getCommentsByTicketID(this.props.match.params.id);
+        }
 
         this.props.getAllStaff();
 
@@ -50,7 +57,6 @@ class TicketPage extends Component {
 
     render() {
         const { ticket, comments } = this.props;
-        console.log(this.props);
 
         if (ticket == null) {
             return null;
@@ -97,7 +103,7 @@ class TicketPage extends Component {
                                     {ticket.details}
                                 </div>
                                 <hr/>
-                                <div className="ticket-comment-area">
+                                <div className={`ticket-comment-area${this.props.loadingComments && " loading"}`}>
                                     <form onSubmit={ this.addComment }>
                                         <b>Add comment</b><br/>
                                         <ReactQuill value={this.state.comment} onChange={this.handleEditorChange}/>
@@ -106,6 +112,7 @@ class TicketPage extends Component {
                                     <hr/>
                                     <b>Comments</b>
                                     <Comments comments={comments} />
+                                    <LoadingLayer spinnerStyle={{color: "#444"}} style={{backgroundColor: "rgba(255,255,255,0.5)"}}/>
                                 </div>
                             </ResponsiveContent>
                         </FixedWidthSidebar>
@@ -139,6 +146,7 @@ const mapStateToProps = (state, props) => {
         ticket: foundTicket,
         currentUser: state.session.currentUser,
         comments: sortedComments,
+        loadingComments: state.comments.loading,
         staff: state.staff.data,
         nextTicket: nextTicket
     };

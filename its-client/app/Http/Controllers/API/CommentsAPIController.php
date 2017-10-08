@@ -49,7 +49,7 @@ class CommentsAPIController extends Controller
         }
 
         $comment = new Comment;
-        $comment->ticket_id = $id;
+        $comment->ticket_id = $request->ticket_id;
         $comment->details = $request->details;
         $comment->commentor_id = $request->commentor_id;
         $comment->commentor_email = $request->commentor_email;

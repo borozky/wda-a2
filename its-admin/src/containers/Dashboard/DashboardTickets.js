@@ -14,7 +14,7 @@ const DashboardTicketRow = ({onSelectRow, ticket = {}, active = false}) => {
             <td>
                 <div className="ticket-summary">
                     <b className="ticket-subject">{subject}</b><br/>
-                    <small className="ticket-meta">{software_issue} ({operating_system})</small>
+                    <small className="ticket-meta">{software_issue} ({operating_system})</small> &nbsp;
                     <span className="ticket-id">#{id}</span>
                 </div>
             </td>
@@ -24,7 +24,10 @@ const DashboardTicketRow = ({onSelectRow, ticket = {}, active = false}) => {
                     {ticket.assigned_to_fullname}
                 </span>
             </td>
-            <td><span className="ticket-created_at">{moment(created_at).format("DD/MM/YYYY").toString()}</span></td>
+            <td>
+                <span className="ticket-created_at">{moment(created_at).format("DD/MM/YYYY").toString()}</span><br/>
+                <small><i>{moment(moment.utc(created_at)).local().fromNow()}</i></small>
+            </td>
         </tr>
     );
 };
@@ -53,7 +56,24 @@ class DashboardTickets extends Component {
 
     handleSearch(event, keyword){
         event.preventDefault();
-        this.props.searchTickets(keyword);
+
+        // on empty search, return all tickets
+        if (keyword.trim().length == 0) {
+            this.setState({ searchedTickets: this.props.tickets });
+            return;
+        }
+
+        // use the Fuse library to search
+        const fuse = new Fuse(this.props.tickets, {
+            shouldSort: true,
+            threshold: 0.1,
+            location: 0,
+            distance: 1000,
+            maxPatternLength: 32,
+            minMatchCharLength: 0,
+            keys: ["id", "subject", "software_issue", "operating_system"]
+        });
+        this.setState({ searchedTickets: fuse.search(keyword) });
     }
 
     render() {

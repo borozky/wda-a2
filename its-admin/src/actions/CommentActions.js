@@ -17,6 +17,7 @@ const TICKET_COMMENTS_DATASOURCE_URL = (ticket_id) => (`${process.env.REACT_APP_
 // Add comment to a ticket
 // Requires ticket ID, the comment, commentor ID, email and his/her fullname
 export const addComment = (ticketID, comment, user) => (dispatch, getState) => { 
+    dispatch({ type: ADDING_COMMENT });
     const user = getState().session.currentUser;
 
     axios.post(COMMENTS_DATASOURCE_URL, {

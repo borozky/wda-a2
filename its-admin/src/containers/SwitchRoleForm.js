@@ -23,6 +23,13 @@ class SwitchRoleForm extends Component {
         this.props.updateProfile(this.props.currentUser.uid, this.state);
     }
 
+    componentWillReceiveProps({currentUser}){
+        this.setState({
+            role: currentUser.role,
+            role_level: currentUser.role_level
+        });
+    }
+
     handleOnChange(event){
         this.setState({
             role: event.target.value > 0 ? "tech" : "helpdesk",

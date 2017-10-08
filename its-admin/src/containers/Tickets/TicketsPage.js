@@ -63,7 +63,7 @@ class TicketsPage extends Component {
 
         const filteredTickets = this.props.tickets.filter((ticket, index) => {
             return statuses.indexOf(ticket.status) > -1;
-        })
+        });
 
         this.setState({ filteredTickets: filteredTickets })
     }
@@ -123,7 +123,10 @@ class TicketsPage extends Component {
                                     <td><TicketStatusBadge status={ticket.status}/></td>
                                     <td className={`ticket-priority-${ticket.priority}`}>{ticket.priority}</td>
                                     <td><span className="ticket-assigned-to">{ticket.assigned_to_fullname}</span></td>
-                                    <td><span className="ticket-created_at">{moment(ticket.created_at).format("DD/MM/YYYY").toString()}</span></td>
+                                    <td>
+                                        <span className="ticket-created_at">{moment(ticket.created_at).format("DD/MM/YYYY").toString()}</span><br/>
+                                        <small><i>{moment(moment.utc(ticket.created_at)).local().fromNow()}</i></small>
+                                    </td>
                                 </tr>
                             }</DataTable>
                         </ResponsiveContent>
