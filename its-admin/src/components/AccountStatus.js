@@ -32,18 +32,6 @@ const AccountStatus = ({user, onLogin, onLogout, loggingIn}) => {
     } else {
         welcomeArray.push("-no name-")
     }
-    
-    console.log("ROLE LEVEL: ", user.role_level);
-    console.log("ROLE: ", user.role);
-    
-    if (user.role_level && user.role) {
-        welcomeArray.push(user.role_level > 0 ? "(Lvl " + user.role_level : "(");
-        welcomeArray.push( user.role.charAt(0).toUpperCase() + user.role.slice(1) + ")" );
-    } else if (user.role_level == 0) {
-        welcomeArray.push("(helpdesk)")
-    } else {
-        welcomeArray.push("(no role)")
-    }
 
     let welcomeMessage = welcomeArray.join(" ");
 

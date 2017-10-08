@@ -6,6 +6,7 @@ export const LOGGED_IN = "LOGGED_IN";
 
 export const LOGGING_OUT = "LOGGING_OUT";
 export const LOGGED_OUT = "LOGGED_OUT";
+export const LOGIN_FAIL = "LOGIN_FAIL";
 
 export const ASSIGNING_NEW_USER_ROLE = "ASSIGNING_NEW_USER_ROLE";
 export const NEW_USER_ROLE_ASSIGNED = "NEW_USER_ROLE_ASSIGNED";
@@ -89,4 +90,20 @@ export const register = (staffDetails = {}) => (dispatch, getState) => {
             payload: error.message
         })
     });
+}
+
+export const signInWithEmailAndPassword = (email, password) => (dispatch, getState) => {
+    let state = getState();
+    if (state.session.currentUser === null) {
+        dispatch({ type: LOGGING_IN });
+        auth().signInWithEmailAndPassword(email, password).then(result => {
+            dispatch({
+                type: LOGGED_IN,
+                payload: { currentUser: result.user }
+            });
+        }).catch(error => {
+            dispatch({ type: LOGIN_FAIL, payload: error.message });
+            alert("LOGIN FAILURE: " + error.message);
+        });
+    }
 }

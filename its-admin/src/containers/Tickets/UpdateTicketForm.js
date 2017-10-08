@@ -15,6 +15,7 @@ class UpdateTicketForm extends Component {
 
         this.handleAssignToStaff = this.handleAssignToStaff.bind(this);
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
+        this.handleEscalationLevel = this.handleEscalationLevel.bind(this);
 
         this.state = {
             status: _.startCase(_.lowerCase(this.props.ticket.status)),
@@ -22,7 +23,7 @@ class UpdateTicketForm extends Component {
             escalation_level: this.props.ticket.escalation_level,
             assigned_to_uid: this.props.ticket.assigned_to_uid,
             assigned_to_fullname: this.props.ticket.assigned_to_fullname,
-            assigned_to_email: this.props.ticket.assigned_to_email
+            assigned_to_email: this.props.ticket.assigned_to_email,
         }
     }
 
@@ -36,6 +37,27 @@ class UpdateTicketForm extends Component {
                 assigned_to_uid: selectedStaff.uid
             })
         }
+    }
+
+    handleEscalationLevel(event){
+        // if escalation is level 1 or more, change the available staff members according to role_level
+        // eg escalation change to level 1, then show level 1-3 technicians
+        let staffForEscalationLevel = this.props.staff.filter(staff => {
+            let escalationLevelInt = Number(this.state.escalation_level) || 0;
+            return Number(staff.role_level) >= escalationLevelInt
+        });
+
+        if (staffForEscalationLevel.length == 0) {
+            this.setState({
+                escalation_level: event.target.value,
+                assigned_to_uid: this.props.ticket.assigned_to_uid,
+                assigned_to_fullname: this.props.ticket.assigned_to_fullname,
+                assigned_to_email: this.props.ticket.assigned_to_email,
+            });
+        } else {
+            this.setState({ escalation_level: event.target.value });
+        }
+
     }
 
     componentWillReceiveProps(nextProps){
@@ -63,7 +85,7 @@ class UpdateTicketForm extends Component {
              if (this.state[key]) { // According to JS, Boolean("") === false
                  newDetails[key] = this.state[key];
              }
-        })
+        });
 
         this.props.updateTicket(this.props.ticket.id, newDetails);
     }
@@ -75,6 +97,11 @@ class UpdateTicketForm extends Component {
         if (this.props.updating) {
             disabledProps.disabled = "Disabled";
         }
+
+        let staffForEscalationLevel = this.props.staff.filter(staff => {
+            let escalationLevelInt = Number(this.state.escalation_level) || 0;
+            return Number(staff.role_level) >= escalationLevelInt
+        });
 
         return (
             <form onSubmit={this.handleOnSubmit} method="POST" id="UpdateTicketForm" className={this.props.updating ? "loading" : ""}>
@@ -99,7 +126,7 @@ class UpdateTicketForm extends Component {
                 </p>
                 <p>
                     <b>Escalation Level</b><br/>
-                    <select value={this.state.escalation_level || ""} onChange={e => {this.setState({escalation_level: e.target.value})}} 
+                    <select value={this.state.escalation_level || ""} onChange={this.handleEscalationLevel}
                         name="ticket-escalation-level" id="TicketEscalationLevel" style={{margin: "0 10px 10px 0"}}>
                         <option value=""> - {(this.props.ticket.escalation_level == null || this.props.ticket.escalation_level == "") && " *"}</option>
                         <option value="1">Level One{this.props.ticket.escalation_level === "1" && " *"}</option>
@@ -107,18 +134,25 @@ class UpdateTicketForm extends Component {
                         <option value="3">Level Three{this.props.ticket.escalation_level === "3" && " *"}</option>
                     </select>
                 </p>
-                <p>
-                    <b>Assigned to</b><br/>
-                    <select value={this.state.assigned_to_uid || ""} onChange={e => {this.handleAssignToStaff(e, e.target.value)}} 
-                            name="ticket-assignedto" id="TicketAssignedTo" style={{margin: "0 10px 10px 0"}}>
-                        <option value=""> - {(this.props.ticket.assigned_to_uid == null || this.props.ticket.assigned_to_uid == "") && " *"}</option>
-                        { this.props.staff.map((person, index) => 
-                            <option key={index} value={person.uid}>
-                                {person.fullname}{this.props.ticket.assigned_to_uid === person.uid && " *"}
-                            </option>
-                        )}
-                    </select>
-                </p>
+                {
+                    staffForEscalationLevel.length > 0 ?
+                    (<p>
+                        <b>Assigned to</b><br/>
+                        <select value={this.state.assigned_to_uid || ""} onChange={e => {this.handleAssignToStaff(e, e.target.value)}} 
+                                name="ticket-assignedto" id="TicketAssignedTo" style={{margin: "0 10px 10px 0"}}>
+                            <option value=""> - {(this.props.ticket.assigned_to_uid == null || this.props.ticket.assigned_to_uid == "") && " *"}</option>
+                            { 
+                                staffForEscalationLevel.map((person, index) => 
+                                    <option key={index} value={person.uid}>
+                                        {person.fullname}{` (${person.role}${(person.role_level > 0) ? ` Lvl ${person.role_level}` : ``})`}{this.props.ticket.assigned_to_uid === person.uid && " *"}
+                                    </option>
+                                )
+                            }
+                        </select>
+                    </p>) : 
+                    (<p><i>There are no available technician for escalation level: {this.state.escalation_level}</i></p>)
+                }
+                
                 <p>
                     <button {...disabledProps} type="submit" className="btn btn-xs btn-primary">
                         { this.props.updating ? "Updating..." : "Update ticket" }
@@ -137,8 +171,7 @@ class UpdateTicketForm extends Component {
 
 const mapStateToProps = (state, props) => {
     return {
-        ...props,
-        staff: state.staff.data,
+        ...props,   // staff and tickets
         updating: state.tickets.updating,
     }
 }

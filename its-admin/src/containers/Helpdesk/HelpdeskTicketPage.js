@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
 import EntryHeader from "../../components/EntryHeader";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { FixedWidthSidebar, Sidebar, ResponsiveContent } from "../../components/FixedWidthSidebar";
 import * as TicketActions from "../../actions/TicketActions";
 import * as CommentActions from "../../actions/CommentActions";
 import * as StaffActions from "../../actions/StaffActions";
-import Comments from "./Comments";
-import UpdateTicketForm from "./UpdateTicketForm";
+import Comments from "../Tickets/Comments";
+import TicketStatusArea from "../Tickets/TicketStatusArea";
 import moment from "moment";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import LoadingLayer from "../../components/LoadingLayer";
 import xss from "xss";
-import TicketStatusArea from "./TicketStatusArea";
 import AssignToTechForm from "./AssignToTechForm";
 
 import "../../stylesheets/TicketPage.css";
 
 import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
+
 
 const TicketDetailsArea = ({ticket}) =>  
     <div>
@@ -26,7 +23,6 @@ const TicketDetailsArea = ({ticket}) =>
         <p><b>Software Isssue</b><br/><span>{ticket.software_issue}</span></p>
         <p><b>Operating System</b><br/><span>{ticket.operating_system}</span></p>
     </div>
-
 
 const TicketFullDetailsArea = ({ticket}) => 
     <div className="ticket-details" style={{minHeight: 140}}>
@@ -41,43 +37,19 @@ const TicketPageEntryHeader = ({nextTicket}) =>
         </div>
     </div>
 
-class TicketPage extends Component {
+class HelpdeskTicketPage extends Component {
 
     constructor(props){
         super(props);
-        this.state = { comment: "" }
-        this.addComment = this.addComment.bind(this);
-        this.props.getAllTickets();
-        this.handleEditorChange = this.handleEditorChange.bind(this);
-
-        window.moment = moment;
-    }
-
-    addComment(e){
-        e.preventDefault();
-        const ticket_id = this.props.match.params.id;
-        const user = this.props.currentUser;
-        this.props.addComment(ticket_id, this.state.comment, user);
-        this.setState({ comment: "" }); 
-    }
-
-    handleEditorChange(value){
-        this.setState({ comment: value });
-    }
-
-    componentWillReceiveProps(nextProps){
-
     }
 
     componentDidMount(){
-        console.log("TICKET ID", this.props.match.params.id);
         if (this.props.comments.length == 0) {
             this.props.getCommentsByTicketID(this.props.match.params.id);
         }
-
         this.props.getAllStaff();
-
     }
+
 
     render() {
         const { ticket, comments, currentUser, staff } = this.props;
@@ -105,12 +77,6 @@ class TicketPage extends Component {
                                 <TicketFullDetailsArea ticket={ticket} />
                                 <hr/>
                                 <div className={`ticket-comment-area${this.props.loadingComments && " loading"}`}>
-                                    <form onSubmit={ this.addComment }>
-                                        <b>Add comment</b><br/>
-                                        <ReactQuill value={this.state.comment} onChange={this.handleEditorChange}/>
-                                        <button type="submit" id="SubmitCommentButton" className="btn btn-md btn-success">Submit comment</button>
-                                    </form>
-                                    <hr/>
                                     <b>Comments</b>
                                     <Comments comments={comments} />
                                     <LoadingLayer spinnerStyle={{color: "#444"}} style={{backgroundColor: "rgba(255,255,255,0.5)"}}/>
@@ -125,32 +91,32 @@ class TicketPage extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-
-    const params = props.match.params; 
-    const ticketID = params.id;
-    const tickets = state.tickets.data;
-    const comments = state.comments.data;
-    const foundTicket = tickets.filter(ticket => ticket.id == ticketID)[0] || null;
-    const foundComments = foundTicket ? comments.filter(comment => comment.ticket_id == foundTicket.id) : [];
-    const sortedComments = foundComments.sort(function(commentA, commentB){
-        const dateA = moment(commentA.created_at).toDate();
-        const dateB = moment(commentB.created_at).toDate();
-
-        // latest comment first
-        return dateA < dateB;
-    });
     
-    const nextTicketID = Number(ticketID) + 1;
-    const nextTicket = tickets.filter(ticket => ticket.id == nextTicketID)[0];
-
-    return {
-        ticket: foundTicket,
-        currentUser: state.session.currentUser,
-        comments: sortedComments,
-        loadingComments: state.comments.loading,
-        staff: state.staff.data,
-        nextTicket: nextTicket
-    };
+        const params = props.match.params; 
+        const ticketID = params.id;
+        const tickets = state.tickets.data;
+        const comments = state.comments.data;
+        const foundTicket = tickets.filter(ticket => ticket.id == ticketID)[0] || null;
+        const foundComments = foundTicket ? comments.filter(comment => comment.ticket_id == foundTicket.id) : [];
+        const sortedComments = foundComments.sort(function(commentA, commentB){
+            const dateA = moment(commentA.created_at).toDate();
+            const dateB = moment(commentB.created_at).toDate();
+    
+            // latest comment first
+            return dateA < dateB;
+        });
+        
+        const nextTicketID = Number(ticketID) + 1;
+        const nextTicket = tickets.filter(ticket => ticket.id == nextTicketID)[0];
+    
+        return {
+            ticket: foundTicket,
+            currentUser: state.session.currentUser,
+            comments: sortedComments,
+            loadingComments: state.comments.loading,
+            staff: state.staff.data,
+            nextTicket: nextTicket
+        };
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -173,6 +139,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TicketPage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HelpdeskTicketPage));

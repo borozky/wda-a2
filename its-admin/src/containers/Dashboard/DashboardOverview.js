@@ -16,28 +16,34 @@ class DashboardOverview extends Component {
 
         return (
             <div id="DashboardOverview">
-                <h4>Ticket information</h4>
-                <p>
-                    <b>Number of tickets</b><br/>{this.props.numberOfTickets} <br/>
-                    <b>Number of tickets assigned to me:</b><br/> {this.props.numberOfStaffTickets} &nbsp;
-                    <Link to="/dashboard/assigned-tickets">View tickets</Link><br/>
-                    <b>Number of pending tickets</b><br/> {this.props.numberOfPendingTickets} &nbsp;
-                    <Link to="/dashboard/pending-tickets">View pending tickets</Link><br/>
-                </p>
-                <hr/>
-
-                <h4>Profile details</h4>
-                <p>
-                    <b>Fullname</b><br/> {fullname}<br/>
-                    <b>Email</b><br/> {this.props.currentUser.email}<br/>
-                    <b>Role</b><br/> {this.props.currentUser.role || "(no role)"}
-                </p>
-                <hr/>
-                <h4>Performance</h4>
-                <p>
-                    <b>Number of resolved tickets</b><br/> {this.props.numberOfResolvedTickets}<br/>
-                    <b>Average resolve time</b><br/> { averageResolveTimeStr }<br/>
-                </p>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <h4><i className="fa fa-ticket"></i> &nbsp;Ticket information</h4>
+                        <p>
+                            <b>Number of tickets</b><br/>{this.props.numberOfTickets} <br/>
+                            <b>Number of tickets assigned to me:</b><br/> {this.props.numberOfStaffTickets} &nbsp;
+                            <Link to="/dashboard/assigned-tickets">View tickets</Link><br/>
+                            <b>Number of pending tickets</b><br/> {this.props.numberOfPendingTickets} &nbsp;
+                            <Link to="/dashboard/pending-tickets">View pending tickets</Link><br/>
+                        </p>
+                        <hr/>
+                    </div>
+                    <div className="col-xs-12 col-sm-6">
+                        <h4><i className="fa fa-user"></i> &nbsp;Profile details</h4>
+                        <p>
+                            <b>Fullname</b><br/> {fullname}<br/>
+                            <b>Email</b><br/> {this.props.currentUser.email}<br/>
+                            <b>Role</b><br/> {this.props.currentUser.role || "(no role)"}
+                        </p>
+                    </div>
+                    <div className="col-xs-12 col-sm-6">
+                        <h4><i className="fa fa-tachometer"></i> &nbsp;Performance</h4>
+                        <p>
+                            <b>Number of resolved tickets</b><br/> {this.props.numberOfResolvedTickets}<br/>
+                            <b>Average resolve time</b><br/> { averageResolveTimeStr }<br/>
+                        </p>
+                    </div>
+                </div>
             </div>
         );
     }

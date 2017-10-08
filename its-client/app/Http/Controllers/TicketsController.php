@@ -55,7 +55,7 @@ class TicketsController extends Controller
         $ticket->software_issue = $request->software_issue;
         $ticket->subject = $request->subject;
         $ticket->details = $request->details;
-        $ticket->status = "pending";
+        $ticket->status = "Pending";
         
         if($ticket->save()){
             return view("tickets.created", compact("ticket"))->with("success", "Ticket has successfully created (ticket id: {$ticket->id})");

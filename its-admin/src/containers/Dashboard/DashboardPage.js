@@ -13,8 +13,8 @@ import DashboardTickets from "./DashboardTickets";
 import DashboardOverview from "./DashboardOverview";
 import DashboardStaffList from "./DashboardStaffList";
 import RefreshTickets from "../../components/RefreshTickets";
+import LoadingLayer from "../../components/LoadingLayer";
 import * as TicketActions from "../../actions/TicketActions";
-
 import moment from "moment";
 
 
@@ -49,9 +49,9 @@ class DashboardPage extends Component {
                     <div className="container">
                         <FixedWidthSidebar direction="left">
                             <Sidebar width={240}>
-                                <DashboardNavigation />
+                                <DashboardNavigation tickets={this.props.tickets}/>
                             </Sidebar>
-                            <ResponsiveContent style={{paddingLeft: 15, marginLeft: 240}}>
+                            <ResponsiveContent style={{paddingLeft: 15, marginLeft: 240}} className={this.props.loadingTickets && `loading`}>
                                 <Switch>
                                     <Route path="/dashboard/assigned-tickets">
                                         <DashboardTickets tickets={this.props.assignedTickets} title="Assigned tickets"/>
@@ -66,6 +66,7 @@ class DashboardPage extends Component {
                                         <DashboardOverview />
                                     </Route>
                                 </Switch>
+                                <LoadingLayer />
                             </ResponsiveContent>
                         </FixedWidthSidebar>
                     </div>
@@ -76,15 +77,18 @@ class DashboardPage extends Component {
 }
 
 const mapStateToProps = (state) => {
+    const tickets = state.tickets.data;
+
     return {
         currentUser: state.session.currentUser,
-        tickets: state.tickets.data,
-        pendingTickets: state.tickets.data.filter(ticket => ticket.status === "Pending").sort(function(ticketA, ticketB){
+        tickets: tickets,
+        loadingTickets: state.tickets.loading,
+        pendingTickets: tickets.filter(ticket => ticket.status.toLowerCase() == "Pending".toLowerCase()).sort(function(ticketA, ticketB){
             const dateA = moment(ticketA.created_at).toDate();
             const dateB = moment(ticketB.created_at).toDate();
             return dateA < dateB;
         }),
-        assignedTickets: state.tickets.data.filter(ticket => ticket.assigned_to_uid === state.session.currentUser.uid).sort(function(ticketA, ticketB){
+        assignedTickets: tickets.filter(ticket => ticket.assigned_to_uid === state.session.currentUser.uid).sort(function(ticketA, ticketB){
             const dateA = moment(ticketA.created_at).toDate();
             const dateB = moment(ticketB.created_at).toDate();
             return dateA < dateB;

@@ -26,6 +26,7 @@ class App extends Component {
     }
 
     render() {
+
         // if current user is not logged in and not in the sign-in page
         // Go to SIGN IN PAGE
         if (this.props.currentUser == null && this.props.location.pathname.indexOf("/signin") == -1) {
@@ -45,7 +46,7 @@ class App extends Component {
                     <SiteHeader user={this.props.currentUser} onLogin={this.login} onLogout={this.logout}/>
                     {(this.props.currentUser && !this.props.signingUp) ? <SiteMain/> : <SignInPage/>}
                     <SiteFooter />
-                    <LoadingLayer />
+                    <LoadingLayer style={{backgroundColor:"#005453", color:"#fff"}} text="Signing In..."/>
                 </div>
             );
         }

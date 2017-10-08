@@ -49,6 +49,7 @@ class DashboardTickets extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+        console.log("NEXT PROPS DASHBOARD TICKETS: ", nextProps.tickets);
         this.setState({
             searchedTickets: nextProps.tickets
         });
@@ -80,8 +81,10 @@ class DashboardTickets extends Component {
         return (
             <div>
                 {this.props.title && <h4>{this.props.title}</h4> }
-                <DataTable {...this.props} data={this.state.searchedTickets} onSearch={this.handleSearch}>{ (ticket, index) => 
+                <DataTable {...this.props} data={this.state.searchedTickets} onSearch={this.handleSearch}>{ (ticket, index) => {
+                    return this.props.children ? this.props.children(ticket, index) :
                     <DashboardTicketRow onSelectRow={this.handleSelectedTicket} key={index} ticket={ticket} active={(this.state.selectedTicket && this.state.selectedTicket.id === ticket.id)}/>
+                }
                 }</DataTable>
             </div>
         );
@@ -90,9 +93,9 @@ class DashboardTickets extends Component {
 
 const mapStateToProps = (state, props) => {
     return {
-        ...props,
         loading: state.tickets.loading,
-        columns: ["Tickets", "Status", "Assigned to", "Created"]
+        columns: ["Tickets", "Status", "Assigned to", "Created"],
+        ...props,
     }
 }
 

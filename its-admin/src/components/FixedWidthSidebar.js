@@ -10,8 +10,8 @@ export function Sidebar({children, style, width}){
     return <div className="fixed-sidebar" style={styling}>{children}</div>
 }
 
-export function ResponsiveContent({children, style}){
-    return <div className="responsive-content"><div className="inner" style={style}>{children}</div></div>
+export function ResponsiveContent({children, style, className}){
+    return <div className={`responsive-content ${className}`}><div className="inner" style={style}>{children}</div></div>
 }
 
 export function FixedWidthSidebar({direction, style, children}){

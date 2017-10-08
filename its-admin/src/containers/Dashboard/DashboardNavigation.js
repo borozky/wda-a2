@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import {NavLink, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 
+import * as TicketActions from "../../actions/TicketActions";
+
 import "../../stylesheets/DashboardNavigation.css";
 
 class DashboardNavigation extends Component {
+
+    componentWillReceiveProps(nextProps){
+        console.log("RECEIVING NEXT PROPS ON DASHBOARDNAVIGATION.JS");
+    }
+
     render() {
         const {numberOfPendingTickets, numberOfCurrentlyAssignedTickets} = this.props;
-
         return (
             <nav id="DashboardNavigation">
                 <div className="list-group">
@@ -15,6 +21,9 @@ class DashboardNavigation extends Component {
                         <i className="fa fa-list"></i> &nbsp;
                         Overview
                     </NavLink>
+                    {
+                        
+                    }
                     <NavLink to="/dashboard/assigned-tickets" className="list-group-item" activeClassName="active">
                     <span className="badge">{numberOfCurrentlyAssignedTickets}</span>
                     <i className="fa fa-check-square-o"></i> &nbsp;
@@ -35,14 +44,17 @@ class DashboardNavigation extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
+    let tickets = props.tickets;
     let currentUser = state.session.currentUser;
-    let numberOfPendingTickets = state.tickets.data.filter(t => t.status == "Pending").length;
+    let numberOfPendingTickets = tickets.filter(t => t.status.toLowerCase() == "Pending".toLowerCase()).length;
 
     return {
+        ...props,
         numberOfPendingTickets: numberOfPendingTickets,
-        numberOfCurrentlyAssignedTickets: state.tickets.data.filter(t => t.assigned_to_uid == currentUser.uid).length
+        numberOfCurrentlyAssignedTickets: tickets.filter(t => t.assigned_to_uid == currentUser.uid).length
     }
 }
+
 
 export default withRouter(connect(mapStateToProps)(DashboardNavigation));

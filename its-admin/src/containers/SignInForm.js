@@ -11,14 +11,14 @@ class SignInForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {
-            username: "",
+            email: "",
             password: ""
         }
     }
 
     handleSubmit(event){
         event.preventDefault();
-        this.props.login(this.state.username, this.state.password);
+        this.props.login(this.state.email, this.state.password);
     }
 
     render() {
@@ -29,12 +29,12 @@ class SignInForm extends Component {
                 <table>
                     <tbody>
                         <tr>
-                            <td>Email</td>
-                            <td><input type="email" name="staff-email" onChange={e => {this.setState({email: e.target.value})}}/></td>
+                            <td style={{textAlign: "right"}}>Email</td>
+                            <td><input type="email" name="staff-email" onChange={e => {this.setState({email: e.target.value})}} style={{margin: "0px 0px 4px 4px"}}/></td>
                         </tr>
                         <tr>
-                            <td>Password</td>
-                            <td><input type="password" name="staff-password" defaultValue={""} onChange={e => {this.setState({password: e.target.value})}}/></td>
+                            <td style={{textAlign: "right"}}>Password</td>
+                            <td><input type="password" name="staff-password" defaultValue={""} onChange={e => {this.setState({password: e.target.value})}} style={{margin: "0px 0px 4px 4px"}}/></td>
                         </tr>
                         <tr className="form-submission-row">
                             <td colSpan="2">
@@ -45,14 +45,6 @@ class SignInForm extends Component {
                 </table>
             </form>
         );
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        login: function(username, password){
-            
-        }
     }
 }
 

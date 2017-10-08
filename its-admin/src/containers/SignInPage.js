@@ -37,7 +37,7 @@ class SignInPage extends Component {
                                     process.env.REACT_APP_ENABLE_CREATE_ACCOUNT_WITH_EMAIL_PASSWORD &&
                                     <div className="row">
                                         <div className="col-xs-12 col-sm-4">
-                                            <SignInForm />
+                                            <SignInForm login={this.props.signInWithEmailAndPassword}/>
                                         </div>
                                         <div className="col-xs-12 col-sm-4">
                                             <RegisterForm />
@@ -58,6 +58,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onLogin: function(){
             dispatch(SessionActions.login());
+        },
+        signInWithEmailAndPassword: function(email, password) {
+            dispatch(SessionActions.signInWithEmailAndPassword(email, password));
         }
     }
 }

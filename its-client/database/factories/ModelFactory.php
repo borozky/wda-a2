@@ -27,13 +27,13 @@ $factory->define(App\Ticket::class, function(Faker\Generator $faker){
     
     $operating_system = ["Windows", "Mac OS", "Linux", "iOS", "Android OS", "other", "- not applicable -"];
     $software_issue = ["Google services setup", "Service accounts", "Storage", "Cloud storage increase", "Wifi Setup", "Printing","Misconfigured software", "other"];
-    $ticket_status = ["Pending", "In Progress", "Unresolved", "Resolved"];
+    $ticket_status = ["Pending"];
 
     return [
         "operating_system" => $operating_system[array_rand($operating_system)],
         "software_issue" => $software_issue[array_rand($software_issue)],
         "subject" => $faker->sentence(6, true),
-        "details" => $faker->text(1000),
+        "details" => $faker->text(400),
         "status" => $ticket_status[array_rand($ticket_status)]
     ];
 });

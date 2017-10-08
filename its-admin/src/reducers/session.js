@@ -24,6 +24,11 @@ export default function session(state = initialSession, action){
                 currentUser: action.payload.currentUser,
                 loggingIn: false
             };
+        case SessionActions.LOGIN_FAIL: 
+            return {
+                ...state,
+                loggingIn: false,
+            };
         case SessionActions.USERSESSION_CHECKED:
             return {
                 ...state,

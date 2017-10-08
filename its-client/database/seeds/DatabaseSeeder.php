@@ -11,8 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, mt_rand(20, 40))->create()->each(function ($user) {
-            factory(App\Ticket::class, mt_rand(3, 6))->create([
+        factory(App\User::class, mt_rand(15, 20))->create()->each(function ($user) {
+            factory(App\Ticket::class, mt_rand(1, 3))->create([
                 "user_id" => $user->id
             ])->each(function($ticket){
                 factory(App\Comment::class, mt_rand(1,4))->create([
