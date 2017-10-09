@@ -42,7 +42,7 @@ class TicketsPage extends Component {
 
     handleOnSelectRow(event, ticket){
         event.preventDefault();
-        console.log(ticket);
+        console.log("TICKETS SELECTED");
         this.props.history.push({
             pathname: `/tickets/${ticket.id}`,
             state: { ticket: ticket }
@@ -112,7 +112,7 @@ class TicketsPage extends Component {
                         </Sidebar>
                         <ResponsiveContent style={{paddingRight: 20}}>
                             <DataTable onSearch={this.handleOnSearch} loading={loading} data={this.state.filteredTickets} columns={columns} style={{maxWidth: "100%"}}>{(ticket, index) => 
-                                <tr key={index} onClick={e => {this.props.history.push(`/tickets/${ticket.id}`)}}>
+                                <tr key={index} onClick={e => {this.handleOnSelectRow(e, ticket)}}>
                                     <td>
                                         <div className="ticket-summary">
                                             <b className="ticket-subject">{ticket.subject}</b><br/>
@@ -122,6 +122,7 @@ class TicketsPage extends Component {
                                     </td>
                                     <td><TicketStatusBadge status={ticket.status}/></td>
                                     <td className={`ticket-priority-${ticket.priority}`}>{ticket.priority}</td>
+                                    <td>{ticket.escalation_level ? `Level ${ticket.escalation_level}` : " - "}</td>
                                     <td><span className="ticket-assigned-to">{ticket.assigned_to_fullname}</span></td>
                                     <td>
                                         <span className="ticket-created_at">{moment(ticket.created_at).format("DD/MM/YYYY").toString()}</span><br/>
@@ -138,10 +139,37 @@ class TicketsPage extends Component {
 
 }
 
+// TICKET SORTING ALGORITHM, 
+// Resolved/Unresolved tickets are displayed last
+// Tickets with higher priority displayed first, or
+// Sort by escalation level
+// if everything is equal, sort by date
+function sortTickets (ticketA, ticketB) {
+    const dateA = moment(ticketA.created_at).toDate();
+    const dateB = moment(ticketB.created_at).toDate();
+    const importance = { "low": 1, "medium": 2, "high": 3 };
+    const statusImportance = {"Pending": 3, "In Progress": 2, "Unresolved": 1, "Resolved": 0};
+    if (ticketA.status == "Resolved" || ticketA.status == "Unresolved") {
+        return Infinity;
+    }
+
+    if (ticketA.priority == ticketB.priority) {
+        if (ticketA.status == ticketB.status) {
+            if (ticketA.escalation_level != ticketB.escalation_level) {
+                return (ticketB.escalation_level || 0) - (ticketA.escalation_level || 0);
+            }
+        }
+        return dateA < dateB
+    } else {
+        return importance[ticketB.priority] - importance[ticketA.priority];
+    }
+}
+
+
 const mapStateToProps = (state) => {
     return {
-        tickets: state.tickets.foundTickets,
-        columns: ["Tickets", "Status", "Priority", "Assigned to", "Created"],
+        tickets: state.tickets.foundTickets.sort(sortTickets),
+        columns: ["Tickets", "Status", "Priority", "Escalation Level", "Assigned to", "Created"],
         loading: state.tickets.loading,
         filterSettings: [
             {

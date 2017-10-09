@@ -85,6 +85,32 @@ class HelpdeskDashboard extends Component {
     }
 }
 
+// TICKET SORTING ALGORITHM
+// Resolved/Unresolved tickets are displayed last
+// Tickets with higher priority displayed first, or
+// Sort by escalation level
+// if everything is equal, sort by date
+function sortTicketsByPriority (ticketA, ticketB) {
+    const dateA = moment(ticketA.created_at).toDate();
+    const dateB = moment(ticketB.created_at).toDate();
+    const importance = { "low": 1, "medium": 2, "high": 3 };
+    const statusImportance = {"Pending": 3, "In Progress": 2, "Unresolved": 1, "Resolved": 0};
+    if (ticketA.status == "Resolved" || ticketA.status == "Unresolved") {
+        return Infinity;
+    }
+
+    if (ticketA.priority == ticketB.priority) {
+        if (ticketA.status == ticketB.status) {
+            if (ticketA.escalation_level != ticketB.escalation_level) {
+                return (ticketB.escalation_level || 0) - (ticketA.escalation_level || 0);
+            }
+        }
+        return dateA < dateB
+    } else {
+        return importance[ticketB.priority] - importance[ticketA.priority];
+    }
+}
+
 const mapStateToProps = (state) => {
     const tickets = state.tickets.data;
     const pendingTickets = tickets.filter(t => t.status.toLowerCase() == "Pending".toLowerCase());
@@ -95,21 +121,9 @@ const mapStateToProps = (state) => {
         currentUser: state.session.currentUser,
         tickets: tickets,
         loadingTickets: state.tickets.loading,
-        pendingTickets: pendingTickets.sort(function(ticketA, ticketB){
-            const dateA = moment(ticketA.created_at).toDate();
-            const dateB = moment(ticketB.created_at).toDate();
-            return dateA < dateB;
-        }),
-        assignedTickets: assignedTickets.sort(function(ticketA, ticketB){
-            const dateA = moment(ticketA.created_at).toDate();
-            const dateB = moment(ticketB.created_at).toDate();
-            return dateA < dateB;
-        }),
-        escalatedTickets: escalatedTickets.sort(function(ticketA, ticketB){
-            const dateA = moment(ticketA.created_at).toDate();
-            const dateB = moment(ticketB.created_at).toDate();
-            return dateA < dateB;
-        }),
+        pendingTickets: pendingTickets.sort(sortTicketsByPriority),
+        assignedTickets: assignedTickets.sort(sortTicketsByPriority),
+        escalatedTickets: escalatedTickets.sort(sortTicketsByPriority),
         numberOfPendingTickets: pendingTickets.length,
     }
 }

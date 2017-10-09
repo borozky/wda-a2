@@ -12,6 +12,9 @@ import LoadingLayer from "../../components/LoadingLayer";
 import xss from "xss";
 import ResolveTicketForm from "./ResolveTicketForm";
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 import "../../stylesheets/TicketPage.css";
 
 import {connect} from "react-redux";
@@ -40,6 +43,24 @@ class TechTicketPage extends Component {
 
     constructor(props){
         super(props);
+        this.state = { comment: "" }
+        this.addComment = this.addComment.bind(this);
+        this.props.getAllTickets();
+        this.handleEditorChange = this.handleEditorChange.bind(this);
+
+        window.moment = moment;
+    }
+
+    addComment(e){
+        e.preventDefault();
+        const ticket_id = this.props.match.params.id;
+        const user = this.props.currentUser;
+        this.props.addComment(ticket_id, this.state.comment, user);
+        this.setState({ comment: "" }); 
+    }
+
+    handleEditorChange(value){
+        this.setState({ comment: value });
     }
 
     componentDidMount(){
@@ -73,7 +94,15 @@ class TechTicketPage extends Component {
                                 <TicketStatusArea ticket={ticket} />
                                 <TicketFullDetailsArea ticket={ticket} />
                                 <hr/>
-                                <div className={`ticket-comment-area${this.props.loadingComments && " loading"}`}>
+                                <div className={`ticket-comment-area${this.props.loadingComments ? " loading" : ""}`}>
+
+                                    <form onSubmit={ this.addComment }>
+                                        <b>Add comment</b><br/>
+                                        <ReactQuill value={this.state.comment} onChange={this.handleEditorChange}/>
+                                        <button type="submit" id="SubmitCommentButton" className="btn btn-md btn-success">Submit comment</button>
+                                    </form>
+
+                                    <hr/>
                                     <b>Comments</b>
                                     <Comments comments={comments} />
                                     <LoadingLayer spinnerStyle={{color: "#444"}} style={{backgroundColor: "rgba(255,255,255,0.5)"}}/>

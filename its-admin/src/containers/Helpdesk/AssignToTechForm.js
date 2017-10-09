@@ -50,6 +50,12 @@ class AssignToTechForm extends Component {
 
     handleOnSubmit(event){
         event.preventDefault();
+        const {priority, escalation_level, assigned_to_uid, assigned_to_email, assigned_to_fullname} = this.state;
+        if ( !priority || !escalation_level || !assigned_to_uid || !assigned_to_email || !assigned_to_fullname) {
+            alert("Cannot update this ticket");
+            return;
+        }
+
         this.props.updateTicket(this.props.ticket.id, {
             status: this.props.ticket.status != "Pending" ? this.props.ticket.status : "In Progress",
             priority: this.state.priority,
@@ -61,13 +67,37 @@ class AssignToTechForm extends Component {
     }
 
     render() {
+        // do not allow submission if
+        // ticket is marked as Resolved/Unresolved
+        // ticket is in progress, and currently escalated to level 1
+        
+        // ticket is disabled if ticket is unassigned/assigned to current staff
+        let allowSubmission = true;
+        let disabled = false;
+        let submitMessage = "Assigning a new technician will mark this ticket as \"In progress\" and escalate this ticket to level 1 (or high level if this ticket is already escalated)"
+        if (["Resolved", "Unresolved"].indexOf(this.props.ticket.status) > -1) {
+            allowSubmission = false;
+            submitMessage = "You cannot update this ticket because it is marked as " + this.props.ticket.status
+        }
+         else if (this.props.ticket.escalation_level == 1 && this.props.ticket.status == "In Progress") {
+            allowSubmission = false;
+            submitMessage = "Ticket is marked as \"In Progress\". You can re-assign tickets to different tech if this ticket is escalated to level 2 or 3"
+        } 
+        else if (this.props.ticket.escalation_level > 1 && this.state.assigned_to_uid == this.props.ticket.assigned_to_uid) {
+            disabled = true;
+            submitMessage = "Ticket is escalated. Reassign this ticket to another tech employee to allow submission"
+        } else if (!this.state.assigned_to_uid) {
+            disabled = true;
+            submitMessage = "Assign this ticket to a tech employee to allow submission"
+        } else if (this.props.updating) {
+            disabled = true;
+        }
+
         let disabledProps = {};
-        if (this.props.updating) {
+        if (disabled) {
             disabledProps.disabled = "Disabled";
         }
-        if ( ! this.state.assigned_to_uid) {
-            disabledProps.disabled = "Disabled";
-        }
+
 
 
         return (
@@ -90,9 +120,10 @@ class AssignToTechForm extends Component {
                     }
                 </p>
                 <p>
-                    <b>Assign to</b><br/>
+                    <b>Assign{this.state.assigned_to_uid && `ed`} to</b><br/>
                     {
-                        Number(this.props.ticket.escalation_level) == 1 ? <i>{this.props.ticket.assigned_to_fullname} (tech)</i> :
+                        (allowSubmission == false) ? 
+                        <i>{this.props.ticket.assigned_to_fullname} (tech)</i> :
                         <select value={this.state.assigned_to_uid} onChange={e => {this.handleAssignToStaff(e, e.target.value)}} 
                             name="ticket-assignedto" id="TicketAssignedTo" style={{margin: "0 10px 10px 0"}}>
                             <option value=""> - {(this.props.ticket.assigned_to_uid == null || this.props.ticket.assigned_to_uid == "") && " *"}</option>
@@ -114,15 +145,16 @@ class AssignToTechForm extends Component {
                         <i>Level {this.state.escalation_level}</i>
                     }
                 </p>
-                {
-                    this.props.ticket.escalation_level != 1 &&
-                    <p>
+                <p>
+                    {
+                        allowSubmission &&
                         <button {...disabledProps} type="submit" className="btn btn-xs btn-primary">
                             { this.props.updating ? "Assigning..." : "Assign ticket" }
-                        </button><hr style={{borderTopColor:"#444"}}/>
-                        <small>Assigning this ticket to a technician will automatically mark this ticket as "In progress". The ticket's escalation level will be assigned depending on techician's role level</small>
-                    </p>
-                }
+                        </button>
+                    }
+                    <hr style={{borderTopColor:"#444"}}/>
+                    <small>{submitMessage}</small>
+                </p>
             </form>
         );
     }

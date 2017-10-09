@@ -25,7 +25,7 @@ export const addComment = (ticketID, comment, user) => (dispatch, getState) => {
         "details": comment,
         "commentor_id": user.uid,
         "commentor_email": user.email,
-        "commentor_fullname": user.displayName
+        "commentor_fullname": user.displayName || user.fullname || null
     }).then(response => {
         dispatch({
             type: COMMENT_ADDED,

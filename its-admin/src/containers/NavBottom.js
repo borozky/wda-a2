@@ -15,10 +15,24 @@ class NavBottom extends Component {
                     <Link to="/dashboard" className="navbar-brand">ITS Ticketing System</Link>
                 </div>
                 <div id="Navbar" className="collapse navbar-collapse">
-                    <ul className="nav navbar-nav navbar-right">
-                        <li><NavLink to="/dashboard" activeClassName="active"><i className="fa fa-tachometer"></i>&nbsp; Dashboard</NavLink></li>
-                        <li><NavLink to="/tickets" activeClassName="active"><i className="fa fa-ticket"> </i>&nbsp; Tickets</NavLink></li>
-                    </ul>
+                    {
+                        this.props.user &&
+                        <ul className="nav navbar-nav navbar-right">
+                            <li><NavLink to="/dashboard" activeClassName="active"><i className="fa fa-tachometer"></i>&nbsp; Dashboard</NavLink></li>
+                            {
+                                (this.props.user.role && this.props.user.role == "helpdesk") &&
+                                <li>
+                                    <NavLink to="/tickets" activeClassName="active"><i className="fa fa-ticket"> </i>&nbsp; Tickets</NavLink>
+                                </li>
+                            }
+                            {
+                                (this.props.user.role && this.props.user.role == "tech") &&
+                                <li>
+                                    <NavLink to="/profile" activeClassName="active"><i className="fa fa-user"> </i>&nbsp; Profile</NavLink>
+                                </li>
+                            }
+                        </ul>
+                    }
                 </div>
             </div>
             

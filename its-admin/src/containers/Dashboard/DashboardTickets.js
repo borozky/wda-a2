@@ -19,11 +19,8 @@ const DashboardTicketRow = ({onSelectRow, ticket = {}, active = false}) => {
                 </div>
             </td>
             <td><TicketStatusBadge status={ticket.status}/></td>
-            <td>
-                <span className="ticket-assigned_to">
-                    {ticket.assigned_to_fullname}
-                </span>
-            </td>
+            <td className={`ticket-priority-${ticket.priority}`}>{ticket.priority}</td>
+            <td>{ticket.escalation_level ? `Level ${ticket.escalation_level}` : " - "}</td>
             <td>
                 <span className="ticket-created_at">{moment(created_at).format("DD/MM/YYYY").toString()}</span><br/>
                 <small><i>{moment(moment.utc(created_at)).local().fromNow()}</i></small>
@@ -94,7 +91,7 @@ class DashboardTickets extends Component {
 const mapStateToProps = (state, props) => {
     return {
         loading: state.tickets.loading,
-        columns: ["Tickets", "Status", "Assigned to", "Created"],
+        columns: ["Tickets", "Status", "Priority", "Escalation Level" , "Created"],
         ...props,
     }
 }

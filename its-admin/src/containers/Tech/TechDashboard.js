@@ -27,6 +27,7 @@ const TechDashboardTicketRow = ({onSelectRow, ticket = {}, active = false}) => {
             </td>
             <td><TicketStatusBadge status={ticket.status}/></td>
             <td>{ticket.escalation_level && `Level ${ticket.escalation_level}`}</td>
+            <td className={`ticket-priority-${ticket.priority}`}>{ticket.priority}</td>
             <td>
                 <span className="ticket-created_at">{moment(created_at).format("DD/MM/YYYY").toString()}</span><br/>
                 <small><i>{moment(moment.utc(created_at)).local().fromNow()}</i></small>
@@ -65,7 +66,7 @@ class TechDashboard extends Component {
                     <div className="container">
                         <div className={this.props.loadingTickets && `loading`}>
                              <DashboardTickets tickets={this.props.assignedTickets} 
-                                                columns={["Tickets", "Status", "Escalation level", "Created"]} 
+                                                columns={["Tickets", "Status", "Escalation level", "Priority" ,"Created"]} 
                                                 title="Assigned tickets">{(ticket, index) => 
                                 <TechDashboardTicketRow onSelectRow={this.handleSelectedTicket} key={index} ticket={ticket}/>
                              }</DashboardTickets>
@@ -78,6 +79,39 @@ class TechDashboard extends Component {
     }
 }
 
+// recent tickets first
+function sortTicketsByDate(ticketA, ticketB){
+    const dateA = moment(ticketA.created_at).toDate();
+    const dateB = moment(ticketB.created_at).toDate();
+    return dateA < dateB;
+}
+
+// TICKET SORTING ALGORITHM
+// Resolved/Unresolved tickets are displayed last
+// Tickets with higher priority displayed first, or
+// Sort by escalation level
+// if everything is equal, sort by date
+function sortTicketsByPriority (ticketA, ticketB) {
+    const dateA = moment(ticketA.created_at).toDate();
+    const dateB = moment(ticketB.created_at).toDate();
+    const importance = { "low": 1, "medium": 2, "high": 3 };
+    const statusImportance = {"Pending": 3, "In Progress": 2, "Unresolved": 1, "Resolved": 0};
+    if (ticketA.status == "Resolved" || ticketA.status == "Unresolved") {
+        return Infinity;
+    }
+
+    if (ticketA.priority == ticketB.priority) {
+        if (ticketA.status == ticketB.status) {
+            if (ticketA.escalation_level != ticketB.escalation_level) {
+                return (ticketB.escalation_level || 0) - (ticketA.escalation_level || 0);
+            }
+        }
+        return dateA < dateB
+    } else {
+        return importance[ticketB.priority] - importance[ticketA.priority];
+    }
+}
+
 const mapStateToProps = (state) => {
     const tickets = state.tickets.data;
     const assignedTickets = tickets.filter(ticket => ticket.assigned_to_uid === state.session.currentUser.uid)
@@ -87,11 +121,7 @@ const mapStateToProps = (state) => {
         tickets: tickets,
         loadingTickets: state.tickets.loading,
         numbnumberOfCurrentlyAssignedTickets: assignedTickets.length,
-        assignedTickets: assignedTickets.sort(function(ticketA, ticketB){
-            const dateA = moment(ticketA.created_at).toDate();
-            const dateB = moment(ticketB.created_at).toDate();
-            return dateA < dateB;
-        }),
+        assignedTickets: assignedTickets.sort(sortTicketsByPriority),
     }
 }
 const mapDispatchToProps = (dispatch) => {

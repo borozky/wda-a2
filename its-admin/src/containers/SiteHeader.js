@@ -7,8 +7,8 @@ class SiteHeader extends Component {
         return (
             <div className="site-header">
               <nav className="navbar">
-                <Navtop/>
-                <NavBottom />
+                <Navtop {...this.props}/>
+                <NavBottom {...this.props}/>
               </nav>
             </div>
         );
