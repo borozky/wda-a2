@@ -44,7 +44,9 @@ class SiteMain extends Component {
             );
         }
         else {
-            return <div className="site-main"></div>;
+            return <div className="site-main">
+                      <div className="container">Loading...</div>
+                   </div>;
         }
     }
 }

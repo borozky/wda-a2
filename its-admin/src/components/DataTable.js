@@ -6,6 +6,26 @@ import PropTypes from 'prop-types';
 
 const DataTableLoading = ({numCols}) => <tr><td colSpan={numCols} style={{textAlign: "center"}}>Loading...</td></tr>
 const DataTableNoItems = ({numCols}) => <tr><td colSpan={numCols} style={{textAlign: "center"}}>No items found.</td></tr>
+const DataTableWrapper = ({children, style}) => <div className="datatable-wrapper" style={style}>{children}</div>
+const DataTableControls = ({label, onSubmit, defaultValue}) => 
+    <div className="datatable-controls">
+        <div className="datatable-control-left">{label} results</div>
+        <div className="datatable-search">
+            <form onSubmit={onSubmit}>
+                <input type="search" id="DatatableSearch" placeholder="Search" defaultValue={defaultValue}/>
+            </form>
+        </div>
+    </div>
+const DataTablePagination = ({onFirst, onPrevious, onNext, onLast}) =>
+    <div className="datatable-pagination">
+        <button className="datatable-first" onClick={onFirst}>First</button>
+        <button className="datatable-previous" onClick={onPrevious}>Previous</button>
+        <button className="datatable-next" onClick={onNext}>Next</button>
+        <button className="datatable-last" onClick={onLast}>Last</button>
+    </div>
+const DataTableParent = ({children, loading=false}) => 
+    <div className={`datatable-parent ${ loading ? " loading" : "" }`}>{children}</div>
+
 
 /**
  * DataTable component
@@ -111,16 +131,9 @@ class DataTable extends Component {
         const {columns, children} = this.props;
 
         return (
-            <div className="datatable-wrapper" style={this.props.style}>
-                <div className="datatable-controls">
-                    <div className="datatable-control-left">{label} results</div>
-                    <div className="datatable-search">
-                        <form onSubmit={this.handleOnSearch}>
-                            <input type="search" id="DatatableSearch" placeholder="Search" defaultValue={searchTerm}/>
-                        </form>
-                    </div>
-                </div>
-                <div className={`datatable-parent ${ this.props.loading ? " loading" : "" }`}>
+            <DataTableWrapper style={this.props.style}>
+                <DataTableControls onSubmit={this.handleOnSearch} defaultValue={searchTerm} label={label}/>
+                <DataTableParent loading={this.props.loading}>
                     <table className="datatable">
                         <thead>
                             <tr>
@@ -128,19 +141,22 @@ class DataTable extends Component {
                             </tr>
                         </thead>
                         <tbody>{ 
+                            /* 
+                            the children of this component SHOULD BE a FUNCTION, not a COMPONENT!!! (ie. children(item, index))
+                            This allows component to render different types of table rows */
                             this.displayedData().length > 0 ? 
-                            this.displayedData().map((item, index) => children(item, index)) : 
-                            <DataTableNoItems numCols={columns.length} />
+                                this.displayedData().map((item, index) => children(item, index)) : 
+                                <DataTableNoItems numCols={columns.length} />
                         }</tbody>
                     </table>
-                </div>
-                <div className="datatable-pagination">
-                    <button className="datatable-first" onClick={e => {this.handlePaginate(e, 1)}}>First</button>
-                    <button className="datatable-previous" onClick={e => {this.handlePaginate(e, currentPage - 1)}}>Previous</button>
-                    <button className="datatable-next" onClick={e => {this.handlePaginate(e, currentPage + 1)}}>Next</button>
-                    <button className="datatable-last" onClick={e => {this.handlePaginate(e, this.numPages())}}>Last</button>
-                </div>
-            </div>
+                </DataTableParent>
+                <DataTablePagination 
+                    onFirst={e => {this.handlePaginate( e, 1 )}} 
+                    onPrevious={e => {this.handlePaginate( e, currentPage - 1 )}}
+                    onNext={e =>{this.handlePaginate( e, currentPage + 1 )}}
+                    onLast={e => {this.handlePaginate( e, this.numPages() )}}
+                    />
+            </DataTableWrapper>
         );
     }
 }

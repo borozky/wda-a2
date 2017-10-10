@@ -16,7 +16,6 @@ import "../../stylesheets/TicketPage.css";
 
 import {connect} from "react-redux";
 
-
 const TicketDetailsArea = ({ticket}) =>  
     <div>
         <p><b>Submitted by: </b><br/><span>{ticket.user.fullname}</span></p>
