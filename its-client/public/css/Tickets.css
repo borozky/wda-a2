@@ -165,8 +165,8 @@ TICKET DETAILS AREA
     min-height: 130px;
     background-color: #fafafa;
     padding: 15px;
-    font-size: 12px;
-    font-family: Menlo, DejaVu Sans Mono, Consolas, monospace;
+    /* font-size: 14px; */
+    /* font-family: Menlo, DejaVu Sans Mono, Consolas, monospace; */
 }
 
 #TicketDetailsArea .ticket-comments {
@@ -203,7 +203,7 @@ TICKET DETAILS AREA
     display: inline-block;
     width: 100%;
     color: #6b6b6b;
-    font-family: Menlo, DejaVu Sans Mono, Consolas, monospace;
+    /* font-family: Menlo, DejaVu Sans Mono, Consolas, monospace; */
 }
 
 

@@ -60,12 +60,12 @@
         
         <div class="ticket-comments">
             <b>Comments</b><br/>
-            @if( count($ticket->comments) > 0)
+            @if( count($ticket->comments) > 0) 
                 <ul class="comments">
                     @foreach($ticket->comments()->orderBy("created_at", "DESC")->get() as $comment)
                         <li class="comment">
-                            <span class="commenter">By: {{ $comment->user->email }}</span> - <small><i>{{ $comment->created_at->diffForHumans() }}</i></small>
-                            <span class="comment-details">{{ $comment->details }}</span>
+                            <span class="commenter">By: {{ $comment->commentor_fullname }}</span> - <small><i>{{ $comment->created_at->diffForHumans() }}</i></small>
+                            <div class="comment-details">{!! $comment->details !!}</div>
                         </li>
                     @endforeach
                 </ul>
