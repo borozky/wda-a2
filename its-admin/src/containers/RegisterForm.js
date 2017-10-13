@@ -39,15 +39,15 @@ class RegisterForm extends Component {
                     <tbody>
                         <tr>
                             <td>Fullname</td>
-                            <td><input type="text" name="staff-fullname" onChange={e => {this.setState({fullname: e.target.value})}}/></td>
+                            <td><input type="text" required={true} name="staff-fullname" onChange={e => {this.setState({fullname: e.target.value})}}/></td>
                         </tr>
                         <tr>
                             <td>Email</td>
-                            <td><input type="email" name="staff-email" onChange={e => {this.setState({email: e.target.value})}}/></td>
+                            <td><input type="email" required={true} name="staff-email" onChange={e => {this.setState({email: e.target.value})}}/></td>
                         </tr>
                         <tr>
                             <td>Password</td>
-                            <td><input type="password" name="staff-password" defaultValue={""} onChange={e => {this.setState({password: e.target.value})}}/></td>
+                            <td><input type="password" required={true} name="staff-password" defaultValue={""} onChange={e => {this.setState({password: e.target.value})}}/></td>
                         </tr>
                         <tr className="form-submission-row">
                             <td colSpan="2">

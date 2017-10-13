@@ -24,10 +24,10 @@ const SiteContentContainerRow = ({children}) =>
 const ColXs12 = ({children, className}) => 
     <div className={`col-xs-12 ${className}`}>{children}</div>
 
-const SignInRegistrationArea = ({login}) => 
+const SignInRegistrationArea = ({onLogin}) => 
     process.env.REACT_APP_ENABLE_CREATE_ACCOUNT_WITH_EMAIL_PASSWORD && <Row>
         <ColXs12 className="col-sm-4">
-            <SignInForm login={login}/>
+            <SignInForm login={onLogin}/>
         </ColXs12>
         <ColXs12 className="col-sm-4">
             <RegisterForm />
