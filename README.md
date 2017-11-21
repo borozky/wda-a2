@@ -19,7 +19,7 @@ This repository has 2 systems. The first one (its-client) is the system that acc
 
 #### Additional notes
 - For its-client system you may submit as many tickets as you like
-- For its-admin system, you may register as many times as you want. You will be assigned as a helpdesk by default. You can change you role later (to technician levels 1, 2 or 3)
+- For its-admin system, you may register as many times as you want. You will be assigned as a helpdesk by default. You can change your role later (to technician levels 1, 2 or 3)
 
 #### Available admins
 - someone@email.com, password: firebase
